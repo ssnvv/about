@@ -1,172 +1,656 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Didavani Originale – Italian-Inspired Streetwear</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    :root {
-      --bg: #fafafa;
-      --txt: #111;
-      --accent: #d62828;
-      --border: #ddd;
-    }
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    }
-    body {
-      background: var(--bg);
-      color: var(--txt);
-      line-height: 1.6;
-    }
-    header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 1.2rem 5vw;
-      border-bottom: 1px solid var(--border);
-    }
-    .logo {
-      font-weight: 800;
-      font-size: 1.4rem;
-      letter-spacing: 1px;
-    }
-    nav a {
-      margin-left: 1.5rem;
-      text-decoration: none;
-      color: var(--txt);
-      font-weight: 600;
-    }
-    nav a:hover {
-      color: var(--accent);
-    }
-    .hero {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      min-height: 70vh;
-      padding: 2rem 5vw;
-    }
-    .hero h1 {
-      font-size: clamp(2.5rem, 6vw, 4rem);
-      margin-bottom: 1rem;
-      letter-spacing: 2px;
-    }
-    .hero p {
-      max-width: 600px;
-      margin-bottom: 2rem;
-      font-size: 1.1rem;
-    }
-    .btn {
-      display: inline-block;
-      background: var(--txt);
-      color: var(--bg);
-      padding: .9rem 2.2rem;
-      border-radius: 4px;
-      text-decoration: none;
-      font-weight: 700;
-      transition: background .2s;
-    }
-    .btn:hover {
-      background: var(--accent);
-    }
-    .gallery {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 1.2rem;
-      padding: 4rem 5vw;
-    }
-    .card {
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      overflow: hidden;
-      text-align: center;
-      padding-bottom: 1rem;
-    }
-    .card img {
-      width: 100%;
-      height: 320px;
-      object-fit: cover;
-    }
-    .card h3 {
-      margin: .8rem 0 .3rem;
-      font-size: 1.1rem;
-    }
-    .price {
-      color: var(--accent);
-      font-weight: 700;
-    }
-    footer {
-      text-align: center;
-      padding: 3rem 5vw 2rem;
-      font-size: .85rem;
-      color: #777;
-    }
-    @media (max-width: 600px) {
-      header {
-        flex-direction: column;
-        gap: .8rem;
-      }
-      nav a {
-        margin: 0 .6rem;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Exodus">
+    <title>Exodus Wallet</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+        body { background: #0a0a0a; color: white; overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
+        
+        /* Header */
+        .header { text-align: center; padding: 50px 20px 20px; }
+        .total { font-size: 38px; font-weight: 700; margin-top: 8px; letter-spacing: -1px; }
+        .total-change { color: #30d158; font-size: 15px; margin-top: 6px; font-weight: 500; }
+        
+        /* Actions */
+        .actions { display: flex; justify-content: center; gap: 32px; padding: 24px 20px; }
+        .action-btn { text-align: center; cursor: pointer; }
+        .action-icon { width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); transition: transform 0.2s; }
+        .action-icon:active { transform: scale(0.9); }
+        
+        /* Chart */
+        .chart-container { margin: 16px; padding: 20px; background: #1c1c1e; border-radius: 20px; height: 200px; position: relative; }
+        .chart-bars { display: flex; align-items: flex-end; justify-content: space-around; height: 140px; padding-top: 20px; }
+        .chart-bar { width: 36px; border-radius: 6px 6px 0 0; transition: height 1s ease; }
+        .chart-labels { display: flex; justify-content: space-around; margin-top: 10px; font-size: 11px; color: #8e8e93; font-weight: 500; }
+        
+        /* Assets */
+        .asset { display: flex; align-items: center; padding: 18px 20px; background: #1c1c1e; margin: 10px 16px; border-radius: 16px; border: 1px solid #2c2c2e; cursor: pointer; transition: background 0.2s; }
+        .asset:active { background: #2c2c2e; }
+        .asset-icon { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; margin-right: 16px; font-weight: 700; }
+        .asset-info { flex: 1; }
+        .asset-name { font-weight: 600; font-size: 17px; }
+        .asset-balance { color: #8e8e93; font-size: 14px; margin-top: 4px; font-family: 'SF Mono', monospace; }
+        .asset-value { text-align: right; }
+        .asset-price { font-weight: 600; font-size: 17px; }
+        .asset-change { font-size: 13px; margin-top: 4px; font-weight: 500; }
+        .positive { color: #30d158; }
+        .negative { color: #ff453a; }
+        
+        /* Tab Bar */
+        .tab-bar { position: fixed; bottom: 0; width: 100%; display: flex; justify-content: space-around; padding: 12px 0 32px; background: rgba(28,28,30,0.95); backdrop-filter: blur(20px); border-top: 1px solid #2c2c2e; z-index: 100; }
+        .tab { text-align: center; color: #8e8e93; font-size: 10px; font-weight: 500; cursor: pointer; }
+        .tab.active { color: #30d158; }
+        .tab svg { width: 26px; height: 26px; margin-bottom: 4px; }
+        
+        /* Modals */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 1000; display: none; opacity: 0; transition: opacity 0.3s; }
+        .modal-overlay.active { display: flex; opacity: 1; }
+        .modal { background: #1c1c1e; border-radius: 24px 24px 0 0; position: absolute; bottom: 0; width: 100%; max-height: 90%; overflow-y: auto; transform: translateY(100%); transition: transform 0.3s ease; }
+        .modal-overlay.active .modal { transform: translateY(0); }
+        .modal-header { padding: 20px; text-align: center; border-bottom: 1px solid #2c2c2e; position: relative; }
+        .modal-title { font-size: 18px; font-weight: 600; }
+        .modal-close { position: absolute; right: 20px; top: 20px; width: 32px; height: 32px; border-radius: 50%; background: #2c2c2e; display: flex; align-items: center; justify-content: center; font-size: 20px; cursor: pointer; }
+        .modal-body { padding: 20px; }
+        
+        /* Form Elements */
+        .input-group { margin-bottom: 20px; }
+        .input-label { font-size: 14px; color: #8e8e93; margin-bottom: 8px; display: block; }
+        .input-field { width: 100%; background: #2c2c2e; border: 1px solid #3a3a3c; border-radius: 12px; padding: 16px; color: white; font-size: 16px; outline: none; }
+        .input-field:focus { border-color: #30d158; }
+        
+        /* QR Code */
+        .qr-container { text-align: center; padding: 30px; background: white; border-radius: 16px; margin: 20px auto; width: fit-content; }
+        .qr-code { width: 200px; height: 200px; background: white; position: relative; }
+        .qr-pattern { display: grid; grid-template-columns: repeat(25, 1fr); gap: 1px; width: 200px; height: 200px; }
+        .qr-cell { background: white; }
+        .qr-cell.black { background: black; }
+        .wallet-address { font-family: monospace; font-size: 13px; color: #8e8e93; margin-top: 16px; word-break: break-all; padding: 12px; background: #2c2c2e; border-radius: 8px; }
+        
+        /* Buttons */
+        .btn-primary { width: 100%; background: #30d158; color: black; border: none; border-radius: 16px; padding: 18px; font-size: 17px; font-weight: 600; cursor: pointer; margin-top: 20px; }
+        .btn-primary:active { transform: scale(0.98); }
+        .btn-secondary { width: 100%; background: #2c2c2e; color: white; border: none; border-radius: 16px; padding: 18px; font-size: 17px; font-weight: 600; cursor: pointer; margin-top: 10px; }
+        
+        /* Transaction List */
+        .tx-item { display: flex; align-items: center; padding: 16px 0; border-bottom: 1px solid #2c2c2e; }
+        .tx-icon { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px; font-size: 18px; }
+        .tx-info { flex: 1; }
+        .tx-title { font-weight: 600; font-size: 15px; }
+        .tx-time { color: #8e8e93; font-size: 13px; margin-top: 2px; }
+        .tx-amount { text-align: right; font-weight: 600; }
+        .tx-amount.sent { color: #ff453a; }
+        .tx-amount.received { color: #30d158; }
+        
+        /* Success Animation */
+        .success-check { width: 80px; height: 80px; border-radius: 50%; background: #30d158; display: flex; align-items: center; justify-content: center; margin: 30px auto; font-size: 40px; animation: scaleIn 0.5s ease; }
+        @keyframes scaleIn { from { transform: scale(0); } to { transform: scale(1); } }
+        .success-text { text-align: center; font-size: 20px; font-weight: 600; margin-bottom: 8px; }
+        .success-sub { text-align: center; color: #8e8e93; font-size: 15px; }
+        
+        /* Coin Selector */
+        .coin-option { display: flex; align-items: center; padding: 16px; background: #2c2c2e; border-radius: 12px; margin-bottom: 10px; cursor: pointer; }
+        .coin-option:active { background: #3a3a3c; }
+        .coin-option.selected { border: 2px solid #30d158; }
+        
+        /* Loader */
+        .loader { display: inline-block; width: 24px; height: 24px; border: 3px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: white; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
+        /* Toast */
+        .toast { position: fixed; top: 60px; left: 50%; transform: translateX(-50%) translateY(-100px); background: #30d158; color: black; padding: 14px 24px; border-radius: 12px; font-weight: 600; z-index: 2000; transition: transform 0.3s; }
+        .toast.show { transform: translateX(-50%) translateY(0); }
+    </style>
 </head>
 <body>
-  <header>
-    <div class="logo">DIDAVANI ORIGINALE</div>
-    <nav>
-      <a href="#shop">Shop</a>
-      <a href="#story">Story</a>
-      <a href="#contact">Contact</a>
-    </nav>
-  </header>
+    <!-- Main View -->
+    <div id="mainView">
+        <div class="header">
+            <div style="color: #8e8e93; font-size: 15px; text-transform: uppercase; letter-spacing: 1px;">Total Balance</div>
+            <div class="total" id="totalBalance">€0.00</div>
+            <div class="total-change" id="totalChange">+€127,432.18 (24h)</div>
+        </div>
+        
+        <div class="actions">
+            <div class="action-btn" onclick="openSend()">
+                <div class="action-icon" style="background: #007aff;">&#8593;</div>
+                <div style="font-size: 12px; margin-top: 4px;">Send</div>
+            </div>
+            <div class="action-btn" onclick="openReceive()">
+                <div class="action-icon" style="background: #30d158;">&#8595;</div>
+                <div style="font-size: 12px; margin-top: 4px;">Receive</div>
+            </div>
+            <div class="action-btn" onclick="openSwap()">
+                <div class="action-icon" style="background: #af52de;">&#8644;</div>
+                <div style="font-size: 12px; margin-top: 4px;">Swap</div>
+            </div>
+            <div class="action-btn" onclick="openBuy()">
+                <div class="action-icon" style="background: #ff9500;">&#36;</div>
+                <div style="font-size: 12px; margin-top: 4px;">Buy</div>
+            </div>
+        </div>
 
-  <section class="hero">
-    <h1>Didavani Originale</h1>
-    <p>Raw Italian attitude, re-stitched for the street. Limited drops, no compromises.</p>
-    <a href="#shop" class="btn">Explore Collection</a>
-  </section>
+        <div class="chart-container">
+            <div style="font-size: 15px; font-weight: 600; margin-bottom: 8px; color: #8e8e93;">Portfolio Allocation</div>
+            <div class="chart-bars" id="chartBars"></div>
+            <div class="chart-labels" id="chartLabels"></div>
+        </div>
 
-  <section id="shop" class="gallery">
-    <!-- Replace img src with your real product shots -->
-    <article class="card">
-      <img src="img/tee1.jpg" alt="Core Logo Tee">
-      <h3>Core Logo Tee</h3>
-      <p class="price">€39</p>
-    </article>
-    <article class="card">
-      <img src="img/hood1.jpg" alt="Heavy Hood">
-      <h3>Heavy Hood</h3>
-      <p class="price">€89</p>
-    </article>
-    <article class="card">
-      <img src="img/cargo1.jpg" alt="Utility Cargos">
-      <h3>Utility Cargos</h3>
-      <p class="price">€109</p>
-    </article>
-    <article class="card">
-      <img src="img/jacket1.jpg" alt="Nylon Track Jacket">
-      <h3>Nylon Track Jacket</h3>
-      <p class="price">€129</p>
-    </article>
-  </section>
+        <div id="assets"></div>
+        <div style="height: 120px;"></div>
+    </div>
 
-  <footer id="contact">
-    <p>Questions? Email us at <a href="mailto:hello@didavanioriginale.com">hello@didavanioriginale.com</a></p>
-    <p>&copy; <span id="yr"></span> Didavani Originale – All rights reserved.</p>
-  </footer>
+    <!-- Wallet View -->
+    <div id="walletView" style="display: none;">
+        <div style="padding: 60px 20px 20px; text-align: center;">
+            <div style="font-size: 28px; font-weight: 700;">Wallets</div>
+        </div>
+        <div id="walletList"></div>
+        <div style="height: 120px;"></div>
+    </div>
 
-  <script>
-    // auto-update year
-    document.getElementById('yr').textContent = new Date().getFullYear();
-  </script>
+    <!-- Exchange View -->
+    <div id="exchangeView" style="display: none;">
+        <div style="padding: 60px 20px 20px; text-align: center;">
+            <div style="font-size: 28px; font-weight: 700;">Exchange</div>
+        </div>
+        <div class="modal-body">
+            <div class="input-group">
+                <label class="input-label">From</label>
+                <div class="coin-option" onclick="selectCoin('from')">
+                    <div class="asset-icon" style="background: #f7931a20; color: #f7931a; width: 36px; height: 36px; font-size: 16px;">₿</div>
+                    <div style="flex: 1;">
+                        <div style="font-weight: 600;">Bitcoin</div>
+                        <div style="font-size: 13px; color: #8e8e93;">BTC</div>
+                    </div>
+                    <div style="font-weight: 600;">0.5 BTC</div>
+                </div>
+            </div>
+            <div style="text-align: center; margin: 10px 0;">
+                <div style="width: 40px; height: 40px; background: #2c2c2e; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 20px;">&#8645;</div>
+            </div>
+            <div class="input-group">
+                <label class="input-label">To</label>
+                <div class="coin-option" onclick="selectCoin('to')">
+                    <div class="asset-icon" style="background: #627eea20; color: #627eea; width: 36px; height: 36px; font-size: 16px;">Ξ</div>
+                    <div style="flex: 1;">
+                        <div style="font-weight: 600;">Ethereum</div>
+                        <div style="font-size: 13px; color: #8e8e93;">ETH</div>
+                    </div>
+                    <div style="font-weight: 600;">8.2 ETH</div>
+                </div>
+            </div>
+            <button class="btn-primary" onclick="showSuccess('Exchange Initiated', 'Your swap will complete in 2-5 minutes')">Exchange Now</button>
+        </div>
+        <div style="height: 120px;"></div>
+    </div>
+
+    <!-- Settings View -->
+    <div id="settingsView" style="display: none;">
+        <div style="padding: 60px 20px 20px; text-align: center;">
+            <div style="font-size: 28px; font-weight: 700;">Settings</div>
+        </div>
+        <div class="modal-body">
+            <div class="coin-option" style="margin-bottom: 10px;">
+                <div style="flex: 1;">
+                    <div style="font-weight: 600;">Currency</div>
+                </div>
+                <div style="color: #8e8e93;">EUR</div>
+            </div>
+            <div class="coin-option" style="margin-bottom: 10px;">
+                <div style="flex: 1;">
+                    <div style="font-weight: 600;">Language</div>
+                </div>
+                <div style="color: #8e8e93;">English</div>
+            </div>
+            <div class="coin-option" style="margin-bottom: 10px;">
+                <div style="flex: 1;">
+                    <div style="font-weight: 600;">Security</div>
+                </div>
+                <div style="color: #8e8e93;">Face ID</div>
+            </div>
+            <div class="coin-option" style="margin-bottom: 10px;">
+                <div style="flex: 1;">
+                    <div style="font-weight: 600;">Backup Wallet</div>
+                </div>
+                <div style="color: #ff453a;">Required</div>
+            </div>
+        </div>
+        <div style="height: 120px;"></div>
+    </div>
+
+    <!-- Tab Bar -->
+    <div class="tab-bar">
+        <div class="tab active" onclick="switchTab('portfolio')">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11 2v20c-5.07-.5-9-4.79-9-10s3.93-9.5 9-10zm2.03 0v8.99H22c-.47-4.74-4.24-8.52-8.97-8.99zm0 11.01V22c4.74-.47 8.5-4.25 8.97-8.99h-8.97z"/></svg>
+            <div>Portfolio</div>
+        </div>
+        <div class="tab" onclick="switchTab('wallet')">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.11 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+            <div>Wallet</div>
+        </div>
+        <div class="tab" onclick="switchTab('exchange')">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
+            <div>Exchange</div>
+        </div>
+        <div class="tab" onclick="switchTab('settings')">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L5.09 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.03-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+            <div>Settings</div>
+        </div>
+    </div>
+
+    <!-- Send Modal -->
+    <div class="modal-overlay" id="sendModal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title">Send Crypto</div>
+                <div class="modal-close" onclick="closeModal('sendModal')">&times;</div>
+            </div>
+            <div class="modal-body">
+                <div class="input-group">
+                    <label class="input-label">Select Asset</label>
+                    <select class="input-field" id="sendCoin" onchange="updateSendBalance()">
+                        <option value="BTC">Bitcoin (BTC)</option>
+                        <option value="ETH">Ethereum (ETH)</option>
+                        <option value="SOL">Solana (SOL)</option>
+                        <option value="BNB">BNB</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Recipient Address</label>
+                    <input type="text" class="input-field" id="sendAddress" placeholder="Enter wallet address">
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Amount</label>
+                    <input type="number" class="input-field" id="sendAmount" placeholder="0.00" step="0.00000001">
+                    <div style="text-align: right; margin-top: 6px; color: #8e8e93; font-size: 13px;">Available: <span id="sendBalance">0.00</span></div>
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Network Fee</label>
+                    <div style="display: flex; gap: 10px;">
+                        <div style="flex: 1; padding: 12px; background: #2c2c2e; border-radius: 10px; text-align: center; border: 2px solid #30d158;">
+                            <div style="font-weight: 600;">Fast</div>
+                            <div style="font-size: 13px; color: #8e8e93;">€2.50</div>
+                        </div>
+                        <div style="flex: 1; padding: 12px; background: #2c2c2e; border-radius: 10px; text-align: center;">
+                            <div style="font-weight: 600;">Standard</div>
+                            <div style="font-size: 13px; color: #8e8e93;">€1.20</div>
+                        </div>
+                        <div style="flex: 1; padding: 12px; background: #2c2c2e; border-radius: 10px; text-align: center;">
+                            <div style="font-weight: 600;">Slow</div>
+                            <div style="font-size: 13px; color: #8e8e93;">€0.50</div>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn-primary" onclick="confirmSend()">Continue</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Receive Modal -->
+    <div class="modal-overlay" id="receiveModal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title">Receive Crypto</div>
+                <div class="modal-close" onclick="closeModal('receiveModal')">&times;</div>
+            </div>
+            <div class="modal-body">
+                <div class="input-group">
+                    <label class="input-label">Select Asset</label>
+                    <select class="input-field" id="receiveCoin" onchange="updateReceiveQR()">
+                        <option value="BTC">Bitcoin (BTC)</option>
+                        <option value="ETH">Ethereum (ETH)</option>
+                        <option value="SOL">Solana (SOL)</option>
+                        <option value="BNB">BNB</option>
+                    </select>
+                </div>
+                <div class="qr-container">
+                    <div class="qr-pattern" id="qrPattern"></div>
+                </div>
+                <div class="wallet-address" id="walletAddress">bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh</div>
+                <button class="btn-secondary" onclick="copyAddress()">Copy Address</button>
+                <button class="btn-primary" onclick="shareAddress()">Share</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal-overlay" id="successModal">
+        <div class="modal" style="border-radius: 24px; max-height: 60%;">
+            <div class="modal-body" style="text-align: center; padding: 40px 20px;">
+                <div class="success-check">&#10003;</div>
+                <div class="success-text" id="successTitle">Success!</div>
+                <div class="success-sub" id="successSub">Transaction confirmed</div>
+                <button class="btn-primary" onclick="closeModal('successModal')" style="margin-top: 30px;">Done</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Transaction History Modal -->
+    <div class="modal-overlay" id="txModal">
+        <div class="modal" style="max-height: 85%;">
+            <div class="modal-header">
+                <div class="modal-title">Transaction History</div>
+                <div class="modal-close" onclick="closeModal('txModal')">&times;</div>
+            </div>
+            <div class="modal-body" id="txList"></div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">Address copied!</div>
+
+    <script>
+        // Generate or load wallet data
+        function getWalletData() {
+            const saved = localStorage.getItem('exodusWallet');
+            if (saved) return JSON.parse(saved);
+            
+            const data = generateRandomWallet();
+            localStorage.setItem('exodusWallet', JSON.stringify(data));
+            return data;
+        }
+
+        function generateRandomWallet() {
+            const randomDecimal = (min, max, dec) => (Math.random() * (max - min) + min).toFixed(dec);
+            
+            const prices = {
+                BTC: 38950.00, ETH: 2100.50, SOL: 89.75, BNB: 285.40,
+                ADA: 0.52, DOT: 6.45, AVAX: 31.20, MATIC: 0.78,
+                LINK: 14.30, UNI: 7.85
+            };
+
+            const holdings = [
+                { name: 'Bitcoin', symbol: 'BTC', balance: randomDecimal(38.5, 42.3, 8), color: '#f7931a', icon: '₿', price: prices.BTC },
+                { name: 'Ethereum', symbol: 'ETH', balance: randomDecimal(280, 320, 6), color: '#627eea', icon: 'Ξ', price: prices.ETH },
+                { name: 'Solana', symbol: 'SOL', balance: randomDecimal(850, 1200, 4), color: '#00ffa3', icon: '◎', price: prices.SOL },
+                { name: 'BNB', symbol: 'BNB', balance: randomDecimal(180, 250, 4), color: '#f3ba2f', icon: 'B', price: prices.BNB },
+                { name: 'Cardano', symbol: 'ADA', balance: randomDecimal(45000, 55000, 2), color: '#0033ad', icon: '₳', price: prices.ADA },
+                { name: 'Polkadot', symbol: 'DOT', balance: randomDecimal(8000, 9500, 3), color: '#e6007a', icon: '●', price: prices.DOT },
+                { name: 'Avalanche', symbol: 'AVAX', balance: randomDecimal(3500, 4200, 3), color: '#e84142', icon: 'A', price: prices.AVAX },
+                { name: 'Polygon', symbol: 'MATIC', balance: randomDecimal(18000, 22000, 2), color: '#8247e5', icon: 'M', price: prices.MATIC },
+                { name: 'Chainlink', symbol: 'LINK', balance: randomDecimal(12000, 15000, 3), color: '#2a5ada', icon: 'L', price: prices.LINK },
+                { name: 'Uniswap', symbol: 'UNI', balance: randomDecimal(8000, 10000, 3), color: '#ff007a', icon: 'U', price: prices.UNI }
+            ];
+
+            let totalValue = 0;
+            holdings.forEach(coin => {
+                coin.value = parseFloat(coin.balance) * coin.price;
+                totalValue += coin.value;
+                coin.change = ((Math.random() * 16 - 6).toFixed(2) >= 0 ? '+' : '') + (Math.random() * 16 - 6).toFixed(2) + '%';
+            });
+
+            holdings.sort((a, b) => b.value - a.value);
+
+            // Generate fake transaction history
+            const txs = [];
+            const txTypes = ['sent', 'received'];
+            for (let i = 0; i < 15; i++) {
+                const coin = holdings[Math.floor(Math.random() * 4)];
+                const type = txTypes[Math.floor(Math.random() * 2)];
+                const amount = (Math.random() * parseFloat(coin.balance) * 0.1).toFixed(4);
+                const days = Math.floor(Math.random() * 30);
+                txs.push({
+                    title: type === 'sent' ? 'Sent ' + coin.name : 'Received ' + coin.name,
+                    time: days === 0 ? 'Today' : days + ' days ago',
+                    amount: (type === 'sent' ? '-' : '+') + amount + ' ' + coin.symbol,
+                    type: type,
+                    icon: type === 'sent' ? '&#8593;' : '&#8595;',
+                    color: coin.color
+                });
+            }
+
+            return { holdings, totalValue, txs, addresses: {
+                BTC: 'bc1q' + Array(39).fill(0).map(() => 'abcdefghijklmnopqrstuvwxyz0123456789'[Math.floor(Math.random() * 36)]).join(''),
+                ETH: '0x' + Array(40).fill(0).map(() => '0123456789abcdef'[Math.floor(Math.random() * 16)]).join(''),
+                SOL: Array(44).fill(0).map(() => 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'[Math.floor(Math.random() * 62)]).join(''),
+                BNB: 'bnb1' + Array(36).fill(0).map(() => 'abcdefghijklmnopqrstuvwxyz0123456789'[Math.floor(Math.random() * 36)]).join('')
+            }};
+        }
+
+        const walletData = getWalletData();
+
+        function formatEuro(num) {
+            return '€' + num.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        function renderPortfolio() {
+            document.getElementById('totalBalance').textContent = formatEuro(walletData.totalValue);
+            const totalChange = (walletData.totalValue * 0.047).toFixed(2);
+            document.getElementById('totalChange').textContent = '+€' + parseFloat(totalChange).toLocaleString('de-DE', {minimumFractionDigits: 2}) + ' (24h)';
+
+            const container = document.getElementById('assets');
+            container.innerHTML = '';
+            walletData.holdings.forEach(coin => {
+                const div = document.createElement('div');
+                div.className = 'asset';
+                div.onclick = () => openTxHistory(coin);
+                div.innerHTML = `
+                    <div class="asset-icon" style="background: ${coin.color}20; color: ${coin.color};">${coin.icon}</div>
+                    <div class="asset-info">
+                        <div class="asset-name">${coin.name}</div>
+                        <div class="asset-balance">${coin.balance} ${coin.symbol}</div>
+                    </div>
+                    <div class="asset-value">
+                        <div class="asset-price">${formatEuro(coin.value)}</div>
+                        <div class="asset-change ${coin.change.includes('+') ? 'positive' : 'negative'}">${coin.change}</div>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+
+            const maxValue = Math.max(...walletData.holdings.map(c => c.value));
+            const chartBars = document.getElementById('chartBars');
+            const chartLabels = document.getElementById('chartLabels');
+            chartBars.innerHTML = '';
+            chartLabels.innerHTML = '';
+            
+            walletData.holdings.slice(0, 6).forEach(coin => {
+                const barHeight = (coin.value / maxValue) * 100;
+                const bar = document.createElement('div');
+                bar.className = 'chart-bar';
+                bar.style.height = barHeight + '%';
+                bar.style.background = coin.color;
+                chartBars.appendChild(bar);
+                
+                const label = document.createElement('div');
+                label.textContent = coin.symbol;
+                chartLabels.appendChild(label);
+            });
+        }
+
+        function renderWallets() {
+            const list = document.getElementById('walletList');
+            list.innerHTML = '';
+            walletData.holdings.forEach(coin => {
+                const div = document.createElement('div');
+                div.className = 'asset';
+                div.onclick = () => { openReceive(); document.getElementById('receiveCoin').value = coin.symbol; updateReceiveQR(); };
+                div.innerHTML = `
+                    <div class="asset-icon" style="background: ${coin.color}20; color: ${coin.color};">${coin.icon}</div>
+                    <div class="asset-info">
+                        <div class="asset-name">${coin.name}</div>
+                        <div class="asset-balance">${coin.balance} ${coin.symbol}</div>
+                    </div>
+                    <div class="asset-value">
+                        <div class="asset-price">${formatEuro(coin.value)}</div>
+                    </div>
+                `;
+                list.appendChild(div);
+            });
+        }
+
+        // Modal functions
+        function openModal(id) {
+            document.getElementById(id).classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function openSend() {
+            document.getElementById('sendAddress').value = '';
+            document.getElementById('sendAmount').value = '';
+            updateSendBalance();
+            openModal('sendModal');
+        }
+
+        function openReceive() {
+            updateReceiveQR();
+            openModal('receiveModal');
+        }
+
+        function openSwap() {
+            showToast('Swap feature coming soon');
+        }
+
+        function openBuy() {
+            showToast('Buy feature - redirecting to partner...');
+        }
+
+        function updateSendBalance() {
+            const symbol = document.getElementById('sendCoin').value;
+            const coin = walletData.holdings.find(c => c.symbol === symbol);
+            document.getElementById('sendBalance').textContent = coin ? coin.balance + ' ' + symbol : '0.00';
+        }
+
+        function confirmSend() {
+            const address = document.getElementById('sendAddress').value;
+            const amount = document.getElementById('sendAmount').value;
+            
+            if (!address || !amount) {
+                showToast('Please fill all fields');
+                return;
+            }
+            
+            if (address.length < 10) {
+                showToast('Invalid address');
+                return;
+            }
+
+            closeModal('sendModal');
+            
+            // Show processing
+            setTimeout(() => {
+                showSuccess('Transaction Sent', 'Your transaction is being processed');
+                // Add to history
+                const symbol = document.getElementById('sendCoin').value;
+                const coin = walletData.holdings.find(c => c.symbol === symbol);
+                walletData.txs.unshift({
+                    title: 'Sent ' + coin.name,
+                    time: 'Just now',
+                    amount: '-' + amount + ' ' + symbol,
+                    type: 'sent',
+                    icon: '&#8593;',
+                    color: coin.color
+                });
+            }, 500);
+        }
+
+        function updateReceiveQR() {
+            const symbol = document.getElementById('receiveCoin').value;
+            const address = walletData.addresses[symbol] || walletData.addresses.BTC;
+            document.getElementById('walletAddress').textContent = address;
+            
+            // Generate fake QR pattern
+            const pattern = document.getElementById('qrPattern');
+            pattern.innerHTML = '';
+            for (let i = 0; i < 625; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'qr-cell';
+                if (Math.random() > 0.5) cell.classList.add('black');
+                pattern.appendChild(cell);
+            }
+        }
+
+        function copyAddress() {
+            const address = document.getElementById('walletAddress').textContent;
+            navigator.clipboard.writeText(address).then(() => showToast('Address copied!'));
+        }
+
+        function shareAddress() {
+            const address = document.getElementById('walletAddress').textContent;
+            if (navigator.share) {
+                navigator.share({ title: 'My Wallet Address', text: address });
+            } else {
+                copyAddress();
+            }
+        }
+
+        function openTxHistory(coin) {
+            const list = document.getElementById('txList');
+            list.innerHTML = '';
+            
+            const coinTxs = walletData.txs.filter(tx => tx.title.includes(coin.name));
+            if (coinTxs.length === 0) {
+                list.innerHTML = '<div style="text-align: center; color: #8e8e93; padding: 40px;">No transactions yet</div>';
+            } else {
+                coinTxs.forEach(tx => {
+                    const div = document.createElement('div');
+                    div.className = 'tx-item';
+                    div.innerHTML = `
+                        <div class="tx-icon" style="background: ${tx.color}20; color: ${tx.color};">${tx.icon}</div>
+                        <div class="tx-info">
+                            <div class="tx-title">${tx.title}</div>
+                            <div class="tx-time">${tx.time}</div>
+                        </div>
+                        <div class="tx-amount ${tx.type}">${tx.amount}</div>
+                    `;
+                    list.appendChild(div);
+                });
+            }
+            
+            openModal('txModal');
+        }
+
+        function showSuccess(title, sub) {
+            document.getElementById('successTitle').textContent = title;
+            document.getElementById('successSub').textContent = sub;
+            openModal('successModal');
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2500);
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            
+            document.getElementById('mainView').style.display = 'none';
+            document.getElementById('walletView').style.display = 'none';
+            document.getElementById('exchangeView').style.display = 'none';
+            document.getElementById('settingsView').style.display = 'none';
+            
+            if (tab === 'portfolio') document.getElementById('mainView').style.display = 'block';
+            if (tab === 'wallet') { document.getElementById('walletView').style.display = 'block'; renderWallets(); }
+            if (tab === 'exchange') document.getElementById('exchangeView').style.display = 'block';
+            if (tab === 'settings') document.getElementById('settingsView').style.display = 'block';
+        }
+
+        // Close modals on overlay click
+        document.querySelectorAll('.modal-overlay').forEach(overlay => {
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) overlay.classList.remove('active');
+            });
+        });
+
+        // Prevent zoom
+        document.addEventListener('dblclick', e => e.preventDefault(), { passive: false });
+        document.addEventListener('touchmove', e => { if (e.scale !== 1) e.preventDefault(); }, { passive: false });
+
+        // Initialize
+        renderPortfolio();
+    </script>
 </body>
 </html>
