@@ -2,655 +2,1483 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Exodus">
-    <title>Exodus Wallet</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSNV | Cyber Security & Full Stack Developer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
-        body { background: #0a0a0a; color: white; overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
-        
-        /* Header */
-        .header { text-align: center; padding: 50px 20px 20px; }
-        .total { font-size: 38px; font-weight: 700; margin-top: 8px; letter-spacing: -1px; }
-        .total-change { color: #30d158; font-size: 15px; margin-top: 6px; font-weight: 500; }
-        
-        /* Actions */
-        .actions { display: flex; justify-content: center; gap: 32px; padding: 24px 20px; }
-        .action-btn { text-align: center; cursor: pointer; }
-        .action-icon { width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); transition: transform 0.2s; }
-        .action-icon:active { transform: scale(0.9); }
-        
-        /* Chart */
-        .chart-container { margin: 16px; padding: 20px; background: #1c1c1e; border-radius: 20px; height: 200px; position: relative; }
-        .chart-bars { display: flex; align-items: flex-end; justify-content: space-around; height: 140px; padding-top: 20px; }
-        .chart-bar { width: 36px; border-radius: 6px 6px 0 0; transition: height 1s ease; }
-        .chart-labels { display: flex; justify-content: space-around; margin-top: 10px; font-size: 11px; color: #8e8e93; font-weight: 500; }
-        
-        /* Assets */
-        .asset { display: flex; align-items: center; padding: 18px 20px; background: #1c1c1e; margin: 10px 16px; border-radius: 16px; border: 1px solid #2c2c2e; cursor: pointer; transition: background 0.2s; }
-        .asset:active { background: #2c2c2e; }
-        .asset-icon { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; margin-right: 16px; font-weight: 700; }
-        .asset-info { flex: 1; }
-        .asset-name { font-weight: 600; font-size: 17px; }
-        .asset-balance { color: #8e8e93; font-size: 14px; margin-top: 4px; font-family: 'SF Mono', monospace; }
-        .asset-value { text-align: right; }
-        .asset-price { font-weight: 600; font-size: 17px; }
-        .asset-change { font-size: 13px; margin-top: 4px; font-weight: 500; }
-        .positive { color: #30d158; }
-        .negative { color: #ff453a; }
-        
-        /* Tab Bar */
-        .tab-bar { position: fixed; bottom: 0; width: 100%; display: flex; justify-content: space-around; padding: 12px 0 32px; background: rgba(28,28,30,0.95); backdrop-filter: blur(20px); border-top: 1px solid #2c2c2e; z-index: 100; }
-        .tab { text-align: center; color: #8e8e93; font-size: 10px; font-weight: 500; cursor: pointer; }
-        .tab.active { color: #30d158; }
-        .tab svg { width: 26px; height: 26px; margin-bottom: 4px; }
-        
-        /* Modals */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 1000; display: none; opacity: 0; transition: opacity 0.3s; }
-        .modal-overlay.active { display: flex; opacity: 1; }
-        .modal { background: #1c1c1e; border-radius: 24px 24px 0 0; position: absolute; bottom: 0; width: 100%; max-height: 90%; overflow-y: auto; transform: translateY(100%); transition: transform 0.3s ease; }
-        .modal-overlay.active .modal { transform: translateY(0); }
-        .modal-header { padding: 20px; text-align: center; border-bottom: 1px solid #2c2c2e; position: relative; }
-        .modal-title { font-size: 18px; font-weight: 600; }
-        .modal-close { position: absolute; right: 20px; top: 20px; width: 32px; height: 32px; border-radius: 50%; background: #2c2c2e; display: flex; align-items: center; justify-content: center; font-size: 20px; cursor: pointer; }
-        .modal-body { padding: 20px; }
-        
-        /* Form Elements */
-        .input-group { margin-bottom: 20px; }
-        .input-label { font-size: 14px; color: #8e8e93; margin-bottom: 8px; display: block; }
-        .input-field { width: 100%; background: #2c2c2e; border: 1px solid #3a3a3c; border-radius: 12px; padding: 16px; color: white; font-size: 16px; outline: none; }
-        .input-field:focus { border-color: #30d158; }
-        
-        /* QR Code */
-        .qr-container { text-align: center; padding: 30px; background: white; border-radius: 16px; margin: 20px auto; width: fit-content; }
-        .qr-code { width: 200px; height: 200px; background: white; position: relative; }
-        .qr-pattern { display: grid; grid-template-columns: repeat(25, 1fr); gap: 1px; width: 200px; height: 200px; }
-        .qr-cell { background: white; }
-        .qr-cell.black { background: black; }
-        .wallet-address { font-family: monospace; font-size: 13px; color: #8e8e93; margin-top: 16px; word-break: break-all; padding: 12px; background: #2c2c2e; border-radius: 8px; }
-        
-        /* Buttons */
-        .btn-primary { width: 100%; background: #30d158; color: black; border: none; border-radius: 16px; padding: 18px; font-size: 17px; font-weight: 600; cursor: pointer; margin-top: 20px; }
-        .btn-primary:active { transform: scale(0.98); }
-        .btn-secondary { width: 100%; background: #2c2c2e; color: white; border: none; border-radius: 16px; padding: 18px; font-size: 17px; font-weight: 600; cursor: pointer; margin-top: 10px; }
-        
-        /* Transaction List */
-        .tx-item { display: flex; align-items: center; padding: 16px 0; border-bottom: 1px solid #2c2c2e; }
-        .tx-icon { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px; font-size: 18px; }
-        .tx-info { flex: 1; }
-        .tx-title { font-weight: 600; font-size: 15px; }
-        .tx-time { color: #8e8e93; font-size: 13px; margin-top: 2px; }
-        .tx-amount { text-align: right; font-weight: 600; }
-        .tx-amount.sent { color: #ff453a; }
-        .tx-amount.received { color: #30d158; }
-        
-        /* Success Animation */
-        .success-check { width: 80px; height: 80px; border-radius: 50%; background: #30d158; display: flex; align-items: center; justify-content: center; margin: 30px auto; font-size: 40px; animation: scaleIn 0.5s ease; }
-        @keyframes scaleIn { from { transform: scale(0); } to { transform: scale(1); } }
-        .success-text { text-align: center; font-size: 20px; font-weight: 600; margin-bottom: 8px; }
-        .success-sub { text-align: center; color: #8e8e93; font-size: 15px; }
-        
-        /* Coin Selector */
-        .coin-option { display: flex; align-items: center; padding: 16px; background: #2c2c2e; border-radius: 12px; margin-bottom: 10px; cursor: pointer; }
-        .coin-option:active { background: #3a3a3c; }
-        .coin-option.selected { border: 2px solid #30d158; }
-        
-        /* Loader */
-        .loader { display: inline-block; width: 24px; height: 24px; border: 3px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: white; animation: spin 1s linear infinite; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        
-        /* Toast */
-        .toast { position: fixed; top: 60px; left: 50%; transform: translateX(-50%) translateY(-100px); background: #30d158; color: black; padding: 14px 24px; border-radius: 12px; font-weight: 600; z-index: 2000; transition: transform 0.3s; }
-        .toast.show { transform: translateX(-50%) translateY(0); }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --neon-green: #00ff41;
+            --neon-cyan: #00f0ff;
+            --neon-red: #ff003c;
+            --neon-purple: #bc13fe;
+            --dark-bg: #0a0a0a;
+            --darker-bg: #050505;
+            --terminal-bg: #0d1117;
+        }
+
+        body {
+            font-family: 'Fira Code', monospace;
+            background: var(--dark-bg);
+            color: #e0e0e0;
+            overflow-x: hidden;
+            cursor: crosshair;
+        }
+
+        /* Matrix Rain Canvas */
+        #matrix-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.15;
+            pointer-events: none;
+        }
+
+        /* Scanline Effect */
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                to bottom,
+                rgba(255,255,255,0),
+                rgba(255,255,255,0) 50%,
+                rgba(0,0,0,0.1) 50%,
+                rgba(0,0,0,0.1)
+            );
+            background-size: 100% 4px;
+            z-index: 9999;
+            pointer-events: none;
+            animation: scanlineMove 10s linear infinite;
+        }
+
+        @keyframes scanlineMove {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(4px); }
+        }
+
+        /* CRT Flicker */
+        .crt-flicker {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 255, 65, 0.02);
+            z-index: 9998;
+            pointer-events: none;
+            animation: flicker 0.15s infinite;
+        }
+
+        @keyframes flicker {
+            0% { opacity: 0.9; }
+            50% { opacity: 1;0; }
+            100% { opacity: 0.9; }
+        }
+
+        /* Glitch Text */
+        .glitch {
+            position: relative;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            letter-spacing: 0.1em;
+        }
+
+        .glitch::before,
+        .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .glitch::before {
+            left: 2px;
+            text-shadow: -2px 0 var(--neon-red);
+            clip: rect(24px, 550px, 90px, 0);
+            animation: glitch-anim-1 2s infinite linear alternate-reverse;
+        }
+
+        .glitch::after {
+            left: -2px;
+            text-shadow: -2px 0 var(--neon-cyan);
+            clip: rect(85px, 550px, 140px, 0);
+            animation: glitch-anim-2 2s infinite linear alternate-reverse;
+        }
+
+        @keyframes glitch-anim-1 {
+            0% { clip: rect(20px, 9999px, 15px, 0); }
+            20% { clip: rect(60px, 9999px, 70px, 0); }
+            40% { clip: rect(20px, 9999px, 50px, 0); }
+            60% { clip: rect(10px, 9999px, 80px, 0); }
+            80% { clip: rect(50px, 9999px, 20px, 0); }
+            100% { clip: rect(70px, 9999px, 90px, 0); }
+        }
+
+        @keyframes glitch-anim-2 {
+            0% { clip: rect(65px, 9999px, 100px, 0); }
+            20% { clip: rect(10px, 9999px, 15px, 0); }
+            40% { clip: rect(80px, 9999px, 5px, 0); }
+            60% { clip: rect(30px, 9999px, 60px, 0); }
+            80% { clip: rect(90px, 9999px, 30px, 0); }
+            100% { clip: rect(5px, 9999px, 80px, 0); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 255, 65, 0.2);
+        }
+
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            color: var(--neon-green);
+            text-shadow: 0 0 10px var(--neon-green);
+        }
+
+        .logo span {
+            color: var(--neon-cyan);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #888;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--neon-green);
+            transition: width 0.3s;
+            box-shadow: 0 0 5px var(--neon-green);
+        }
+
+        .nav-links a:hover {
+            color: var(--neon-green);
+            text-shadow: 0 0 5px var(--neon-green);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 1;
+            padding: 0 20px;
+        }
+
+        .hero-content {
+            text-align: center;
+            max-width: 900px;
+        }
+
+        .hero-subtitle {
+            font-size: 1rem;
+            color: var(--neon-cyan);
+            margin-bottom: 20px;
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards 0.5s;
+        }
+
+        .hero-title {
+            font-size: clamp(3rem, 8vw, 6rem);
+            margin-bottom: 20px;
+            color: var(--neon-green);
+            text-shadow: 0 0 20px rgba(0, 255, 65, 0.5);
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards 0.8s;
+        }
+
+        .hero-description {
+            font-size: 1.1rem;
+            color: #aaa;
+            margin-bottom: 40px;
+            line-height: 1.8;
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards 1.1s;
+        }
+
+        .typing-text {
+            border-right: 2px solid var(--neon-green);
+            animation: blink 0.7s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { border-color: transparent; }
+            50% { border-color: var(--neon-green); }
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards 1.4s;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            border: 1px solid var(--neon-green);
+            background: transparent;
+            color: var(--neon-green);
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--neon-green);
+            transition: left 0.3s;
+            z-index: -1;
+        }
+
+        .btn:hover {
+            color: var(--dark-bg);
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.4);
+        }
+
+        .btn:hover::before {
+            left: 0;
+        }
+
+        .btn-secondary {
+            border-color: var(--neon-cyan);
+            color: var(--neon-cyan);
+        }
+
+        .btn-secondary::before {
+            background: var(--neon-cyan);
+        }
+
+        .btn-secondary:hover {
+            color: var(--dark-bg);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Terminal Window */
+        .terminal {
+            background: var(--terminal-bg);
+            border: 1px solid #333;
+            border-radius: 8px;
+            max-width: 700px;
+            margin: 0 auto;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .terminal-header {
+            background: #161b22;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid #333;
+        }
+
+        .terminal-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .dot-red { background: #ff5f56; }
+        .dot-yellow { background: #ffbd2e; }
+        .dot-green { background: #27c93f; }
+
+        .terminal-body {
+            padding: 20px;
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+
+        .terminal-line {
+            margin-bottom: 8px;
+        }
+
+        .terminal-prompt {
+            color: var(--neon-green);
+        }
+
+        .terminal-command {
+            color: #e0e0e0;
+        }
+
+        .terminal-output {
+            color: #888;
+            padding-left: 20px;
+        }
+
+        .terminal-output.success {
+            color: var(--neon-green);
+        }
+
+        .terminal-output.error {
+            color: var(--neon-red);
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 15px;
+            background: var(--neon-green);
+            animation: blink 1s infinite;
+            vertical-align: middle;
+        }
+
+        /* Sections */
+        section {
+            position: relative;
+            z-index: 1;
+            padding: 100px 50px;
+        }
+
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            color: var(--neon-green);
+            margin-bottom: 50px;
+            text-align: center;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 2px;
+            background: var(--neon-green);
+            margin: 15px auto 0;
+            box-shadow: 0 0 10px var(--neon-green);
+        }
+
+        /* About Section */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            max-width: 1200px;
+            margin: 0 auto;
+            align-items: center;
+        }
+
+        .about-text {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: #bbb;
+        }
+
+        .about-text p {
+            margin-bottom: 20px;
+        }
+
+        .about-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .stat-box {
+            background: rgba(0, 255, 65, 0.05);
+            border: 1px solid rgba(0, 255, 65, 0.2);
+            padding: 25px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .stat-box:hover {
+            border-color: var(--neon-green);
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.1);
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            color: var(--neon-green);
+            text-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: #888;
+            margin-top: 5px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Skills Section */
+        .skills-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .skill-category {
+            background: rgba(13, 17, 23, 0.8);
+            border: 1px solid #222;
+            padding: 30px;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+
+        .skill-category:hover {
+            border-color: var(--neon-green);
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.05);
+        }
+
+        .skill-category h3 {
+            color: var(--neon-cyan);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .skill-category h3::before {
+            content: '>';
+            color: var(--neon-green);
+        }
+
+        .skill-list {
+            list-style: none;
+        }
+
+        .skill-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #1a1a1a;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .skill-list li:last-child {
+            border-bottom: none;
+        }
+
+        .skill-name {
+            color: #ccc;
+            font-size: 0.9rem;
+        }
+
+        .skill-level {
+            display: flex;
+            gap: 3px;
+        }
+
+        .skill-dot {
+            width: 8px;
+            height: 8px;
+            background: #333;
+            border-radius: 1px;
+        }
+
+        .skill-dot.active {
+            background: var(--neon-green);
+            box-shadow: 0 0 5px var(--neon-green);
+        }
+
+        /* Projects Section */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .project-card {
+            background: var(--terminal-bg);
+            border: 1px solid #222;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 3px;
+            height: 100%;
+            background: var(--neon-green);
+            transform: scaleY(0);
+            transition: transform 0.3s;
+        }
+
+        .project-card:hover::before {
+            transform: scaleY(1);
+        }
+
+        .project-card:hover {
+            border-color: var(--neon-green);
+            transform: translateX(5px);
+        }
+
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .project-title {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--neon-cyan);
+            font-size: 1.1rem;
+        }
+
+        .project-status {
+            font-size: 0.7rem;
+            padding: 4px 10px;
+            border-radius: 2px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .status-active {
+            background: rgba(0, 255, 65, 0.1);
+            color: var(--neon-green);
+            border: 1px solid rgba(0, 255, 65, 0.3);
+        }
+
+        .project-desc {
+            color: #888;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .project-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .tech-tag {
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            background: rgba(0, 240, 255, 0.1);
+            color: var(--neon-cyan);
+            border: 1px solid rgba(0, 240, 255, 0.2);
+        }
+
+        /* Contact Section */
+        .contact-container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .contact-text {
+            color: #888;
+            margin-bottom: 40px;
+            font-size: 1.1rem;
+        }
+
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-bottom: 50px;
+        }
+
+        .contact-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #aaa;
+            text-decoration: none;
+            padding: 15px 30px;
+            border: 1px solid #333;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .contact-link:hover {
+            border-color: var(--neon-green);
+            color: var(--neon-green);
+            box-shadow: 0 0 15px rgba(0, 255, 65, 0.1);
+            transform: translateY(-3px);
+        }
+
+        .contact-link svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px;
+            border-top: 1px solid #1a1a1a;
+            color: #555;
+            font-size: 0.8rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        footer span {
+            color: var(--neon-green);
+        }
+
+        /* Binary Background Decoration */
+        .binary-bg {
+            position: absolute;
+            font-size: 0.7rem;
+            color: rgba(0, 255, 65, 0.03);
+            font-family: 'Fira Code', monospace;
+            white-space: pre;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .about-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            section {
+                padding: 60px 20px;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--dark-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--neon-green);
+        }
+
+        /* Selection */
+        ::selection {
+            background: var(--neon-green);
+            color: var(--dark-bg);
+        }
+
+        /* Loading Animation */
+        .loading-bar {
+            width: 100%;
+            height: 2px;
+            background: #111;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 10000;
+        }
+
+        .loading-progress {
+            height: 100%;
+            background: var(--neon-green);
+            width: 0%;
+            animation: loadProgress 2s ease forwards;
+            box-shadow: 0 0 10px var(--neon-green);
+        }
+
+        @keyframes loadProgress {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+
+        /* Hexagon Grid Background */
+        .hex-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(30deg, #0a0a0a 12%, transparent 12.5%, transparent 87%, #0a0a0a 87.5%, #0a0a0a),
+                linear-gradient(150deg, #0a0a0a 12%, transparent 12.5%, transparent 87%, #0a0a0a 87.5%, #0a0a0a),
+                linear-gradient(30deg, #0a0a0a 12%, transparent 12.5%, transparent 87%, #0a0a0a 87.5%, #0a0a0a),
+                linear-gradient(150deg, #0a0a0a 12%, transparent 12.5%, transparent 87%, #0a0a0a 87.5%, #0a0a0a),
+                linear-gradient(60deg, #0f0f0f 25%, transparent 25.5%, transparent 75%, #0f0f0f 75%, #0f0f0f),
+                linear-gradient(60deg, #0f0f0f 25%, transparent 25.5%, transparent 75%, #0f0f0f 75%, #0f0f0f);
+            background-size: 40px 70px;
+            background-position: 0 0, 0 0, 20px 35px, 20px 35px, 0 0, 20px 35px;
+            opacity: 0.3;
+            z-index: 0;
+            pointer-events: none;
+        }
     </style>
 </head>
 <body>
-    <!-- Main View -->
-    <div id="mainView">
-        <div class="header">
-            <div style="color: #8e8e93; font-size: 15px; text-transform: uppercase; letter-spacing: 1px;">Total Balance</div>
-            <div class="total" id="totalBalance">€0.00</div>
-            <div class="total-change" id="totalChange">+€127,432.18 (24h)</div>
-        </div>
-        
-        <div class="actions">
-            <div class="action-btn" onclick="openSend()">
-                <div class="action-icon" style="background: #007aff;">&#8593;</div>
-                <div style="font-size: 12px; margin-top: 4px;">Send</div>
-            </div>
-            <div class="action-btn" onclick="openReceive()">
-                <div class="action-icon" style="background: #30d158;">&#8595;</div>
-                <div style="font-size: 12px; margin-top: 4px;">Receive</div>
-            </div>
-            <div class="action-btn" onclick="openSwap()">
-                <div class="action-icon" style="background: #af52de;">&#8644;</div>
-                <div style="font-size: 12px; margin-top: 4px;">Swap</div>
-            </div>
-            <div class="action-btn" onclick="openBuy()">
-                <div class="action-icon" style="background: #ff9500;">&#36;</div>
-                <div style="font-size: 12px; margin-top: 4px;">Buy</div>
-            </div>
-        </div>
-
-        <div class="chart-container">
-            <div style="font-size: 15px; font-weight: 600; margin-bottom: 8px; color: #8e8e93;">Portfolio Allocation</div>
-            <div class="chart-bars" id="chartBars"></div>
-            <div class="chart-labels" id="chartLabels"></div>
-        </div>
-
-        <div id="assets"></div>
-        <div style="height: 120px;"></div>
+    <!-- Loading Bar -->
+    <div class="loading-bar">
+        <div class="loading-progress"></div>
     </div>
 
-    <!-- Wallet View -->
-    <div id="walletView" style="display: none;">
-        <div style="padding: 60px 20px 20px; text-align: center;">
-            <div style="font-size: 28px; font-weight: 700;">Wallets</div>
-        </div>
-        <div id="walletList"></div>
-        <div style="height: 120px;"></div>
-    </div>
+    <!-- Effects -->
+    <div class="hex-grid"></div>
+    <canvas id="matrix-canvas"></canvas>
+    <div class="scanlines"></div>
+    <div class="crt-flicker"></div>
 
-    <!-- Exchange View -->
-    <div id="exchangeView" style="display: none;">
-        <div style="padding: 60px 20px 20px; text-align: center;">
-            <div style="font-size: 28px; font-weight: 700;">Exchange</div>
-        </div>
-        <div class="modal-body">
-            <div class="input-group">
-                <label class="input-label">From</label>
-                <div class="coin-option" onclick="selectCoin('from')">
-                    <div class="asset-icon" style="background: #f7931a20; color: #f7931a; width: 36px; height: 36px; font-size: 16px;">₿</div>
-                    <div style="flex: 1;">
-                        <div style="font-weight: 600;">Bitcoin</div>
-                        <div style="font-size: 13px; color: #8e8e93;">BTC</div>
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">&lt;SSNV<span>/&gt;</span></div>
+        <ul class="nav-links">
+            <li><a href="#about">[01] About</a></li>
+            <li><a href="#skills">[02] Skills</a></li>
+            <li><a href="#projects">[03] Projects</a></li>
+            <li><a href="#contact">[04] Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-subtitle">&gt; Initializing secure connection...</div>
+            <h1 class="hero-title glitch" data-text="SSNV">SSNV</h1>
+            <p class="hero-description">
+                <span class="typing-text" id="typing"></span><span class="cursor"></span>
+            </p>
+            <div class="hero-buttons">
+                <a href="#contact" class="btn">ESTABLISH CONNECTION</a>
+                <a href="https://www.linkedin.com/in/ssnv-co-1a8306410/" target="_blank" class="btn btn-secondary">VIEW LINKEDIN</a>
+            </div>
+            
+            <div style="margin-top: 60px;">
+                <div class="terminal">
+                    <div class="terminal-header">
+                        <div class="terminal-dot dot-red"></div>
+                        <div class="terminal-dot dot-yellow"></div>
+                        <div class="terminal-dot dot-green"></div>
+                        <span style="color: #666; font-size: 0.8rem; margin-left: 10px;">ssnv@root:~</span>
                     </div>
-                    <div style="font-weight: 600;">0.5 BTC</div>
-                </div>
-            </div>
-            <div style="text-align: center; margin: 10px 0;">
-                <div style="width: 40px; height: 40px; background: #2c2c2e; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 20px;">&#8645;</div>
-            </div>
-            <div class="input-group">
-                <label class="input-label">To</label>
-                <div class="coin-option" onclick="selectCoin('to')">
-                    <div class="asset-icon" style="background: #627eea20; color: #627eea; width: 36px; height: 36px; font-size: 16px;">Ξ</div>
-                    <div style="flex: 1;">
-                        <div style="font-weight: 600;">Ethereum</div>
-                        <div style="font-size: 13px; color: #8e8e93;">ETH</div>
-                    </div>
-                    <div style="font-weight: 600;">8.2 ETH</div>
-                </div>
-            </div>
-            <button class="btn-primary" onclick="showSuccess('Exchange Initiated', 'Your swap will complete in 2-5 minutes')">Exchange Now</button>
-        </div>
-        <div style="height: 120px;"></div>
-    </div>
-
-    <!-- Settings View -->
-    <div id="settingsView" style="display: none;">
-        <div style="padding: 60px 20px 20px; text-align: center;">
-            <div style="font-size: 28px; font-weight: 700;">Settings</div>
-        </div>
-        <div class="modal-body">
-            <div class="coin-option" style="margin-bottom: 10px;">
-                <div style="flex: 1;">
-                    <div style="font-weight: 600;">Currency</div>
-                </div>
-                <div style="color: #8e8e93;">EUR</div>
-            </div>
-            <div class="coin-option" style="margin-bottom: 10px;">
-                <div style="flex: 1;">
-                    <div style="font-weight: 600;">Language</div>
-                </div>
-                <div style="color: #8e8e93;">English</div>
-            </div>
-            <div class="coin-option" style="margin-bottom: 10px;">
-                <div style="flex: 1;">
-                    <div style="font-weight: 600;">Security</div>
-                </div>
-                <div style="color: #8e8e93;">Face ID</div>
-            </div>
-            <div class="coin-option" style="margin-bottom: 10px;">
-                <div style="flex: 1;">
-                    <div style="font-weight: 600;">Backup Wallet</div>
-                </div>
-                <div style="color: #ff453a;">Required</div>
-            </div>
-        </div>
-        <div style="height: 120px;"></div>
-    </div>
-
-    <!-- Tab Bar -->
-    <div class="tab-bar">
-        <div class="tab active" onclick="switchTab('portfolio')">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11 2v20c-5.07-.5-9-4.79-9-10s3.93-9.5 9-10zm2.03 0v8.99H22c-.47-4.74-4.24-8.52-8.97-8.99zm0 11.01V22c4.74-.47 8.5-4.25 8.97-8.99h-8.97z"/></svg>
-            <div>Portfolio</div>
-        </div>
-        <div class="tab" onclick="switchTab('wallet')">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.11 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
-            <div>Wallet</div>
-        </div>
-        <div class="tab" onclick="switchTab('exchange')">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
-            <div>Exchange</div>
-        </div>
-        <div class="tab" onclick="switchTab('settings')">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L5.09 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.03-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
-            <div>Settings</div>
-        </div>
-    </div>
-
-    <!-- Send Modal -->
-    <div class="modal-overlay" id="sendModal">
-        <div class="modal">
-            <div class="modal-header">
-                <div class="modal-title">Send Crypto</div>
-                <div class="modal-close" onclick="closeModal('sendModal')">&times;</div>
-            </div>
-            <div class="modal-body">
-                <div class="input-group">
-                    <label class="input-label">Select Asset</label>
-                    <select class="input-field" id="sendCoin" onchange="updateSendBalance()">
-                        <option value="BTC">Bitcoin (BTC)</option>
-                        <option value="ETH">Ethereum (ETH)</option>
-                        <option value="SOL">Solana (SOL)</option>
-                        <option value="BNB">BNB</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <label class="input-label">Recipient Address</label>
-                    <input type="text" class="input-field" id="sendAddress" placeholder="Enter wallet address">
-                </div>
-                <div class="input-group">
-                    <label class="input-label">Amount</label>
-                    <input type="number" class="input-field" id="sendAmount" placeholder="0.00" step="0.00000001">
-                    <div style="text-align: right; margin-top: 6px; color: #8e8e93; font-size: 13px;">Available: <span id="sendBalance">0.00</span></div>
-                </div>
-                <div class="input-group">
-                    <label class="input-label">Network Fee</label>
-                    <div style="display: flex; gap: 10px;">
-                        <div style="flex: 1; padding: 12px; background: #2c2c2e; border-radius: 10px; text-align: center; border: 2px solid #30d158;">
-                            <div style="font-weight: 600;">Fast</div>
-                            <div style="font-size: 13px; color: #8e8e93;">€2.50</div>
+                    <div class="terminal-body" id="terminal">
+                        <div class="terminal-line">
+                            <span class="terminal-prompt">root@ssnv:~$</span>
+                            <span class="terminal-command"> whoami</span>
                         </div>
-                        <div style="flex: 1; padding: 12px; background: #2c2c2e; border-radius: 10px; text-align: center;">
-                            <div style="font-weight: 600;">Standard</div>
-                            <div style="font-size: 13px; color: #8e8e93;">€1.20</div>
+                        <div class="terminal-line terminal-output success">
+                            ssnv — Full Stack Developer | Cyber Security Specialist | Ethical Hacker
                         </div>
-                        <div style="flex: 1; padding: 12px; background: #2c2c2e; border-radius: 10px; text-align: center;">
-                            <div style="font-weight: 600;">Slow</div>
-                            <div style="font-size: 13px; color: #8e8e93;">€0.50</div>
+                        <div class="terminal-line">
+                            <span class="terminal-prompt">root@ssnv:~$</span>
+                            <span class="terminal-command"> status --all</span>
+                        </div>
+                        <div class="terminal-line terminal-output">
+                            [OK] System Security: ACTIVE<br>
+                            [OK] Penetration Testing: ENABLED<br>
+                            [OK] Full Stack Development: OPERATIONAL<br>
+                            [OK] Network Defense: ARMED
+                        </div>
+                        <div class="terminal-line">
+                            <span class="terminal-prompt">root@ssnv:~$</span>
+                            <span class="terminal-command" id="current-command"></span><span class="cursor"></span>
                         </div>
                     </div>
                 </div>
-                <button class="btn-primary" onclick="confirmSend()">Continue</button>
             </div>
         </div>
-    </div>
+    </section>
 
-    <!-- Receive Modal -->
-    <div class="modal-overlay" id="receiveModal">
-        <div class="modal">
-            <div class="modal-header">
-                <div class="modal-title">Receive Crypto</div>
-                <div class="modal-close" onclick="closeModal('receiveModal')">&times;</div>
+    <!-- About Section -->
+    <section id="about">
+        <h2 class="section-title glitch" data-text="ABOUT">ABOUT</h2>
+        <div class="about-grid">
+            <div class="about-text">
+                <p>
+                    I'm <strong style="color: var(--neon-green);">SSNV</strong> — a developer who operates at the intersection of 
+                    <span style="color: var(--neon-cyan);">code</span> and <span style="color: var(--neon-red);">security</span>. 
+                    I don't just write software; I architect systems that are built to withstand attacks from day one.
+                </p>
+                <p>
+                    With expertise spanning across the entire development stack and deep knowledge of 
+                    cybersecurity principles, I bring a unique offensive-security mindset to every project. 
+                    I know how attackers think because I think like one — ethically.
+                </p>
+                <p>
+                    From low-level systems programming to high-level web architectures, from vulnerability 
+                    assessment to secure code review, I cover all sectors of the tech landscape.
+                </p>
             </div>
-            <div class="modal-body">
-                <div class="input-group">
-                    <label class="input-label">Select Asset</label>
-                    <select class="input-field" id="receiveCoin" onchange="updateReceiveQR()">
-                        <option value="BTC">Bitcoin (BTC)</option>
-                        <option value="ETH">Ethereum (ETH)</option>
-                        <option value="SOL">Solana (SOL)</option>
-                        <option value="BNB">BNB</option>
-                    </select>
+            <div class="about-stats">
+                <div class="stat-box">
+                    <div class="stat-number" id="stat1">0</div>
+                    <div class="stat-label">Languages Mastered</div>
                 </div>
-                <div class="qr-container">
-                    <div class="qr-pattern" id="qrPattern"></div>
+                <div class="stat-box">
+                    <div class="stat-number" id="stat2">0</div>
+                    <div class="stat-label">Security Audits</div>
                 </div>
-                <div class="wallet-address" id="walletAddress">bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh</div>
-                <button class="btn-secondary" onclick="copyAddress()">Copy Address</button>
-                <button class="btn-primary" onclick="shareAddress()">Share</button>
+                <div class="stat-box">
+                    <div class="stat-number" id="stat3">0</div>
+                    <div class="stat-label">Projects Secured</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number" id="stat4">0</div>
+                    <div class="stat-label">Vulns Patched</div>
+                </div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <!-- Success Modal -->
-    <div class="modal-overlay" id="successModal">
-        <div class="modal" style="border-radius: 24px; max-height: 60%;">
-            <div class="modal-body" style="text-align: center; padding: 40px 20px;">
-                <div class="success-check">&#10003;</div>
-                <div class="success-text" id="successTitle">Success!</div>
-                <div class="success-sub" id="successSub">Transaction confirmed</div>
-                <button class="btn-primary" onclick="closeModal('successModal')" style="margin-top: 30px;">Done</button>
+    <!-- Skills Section -->
+    <section id="skills">
+        <h2 class="section-title glitch" data-text="SKILLS_MATRIX">SKILLS_MATRIX</h2>
+        <div class="skills-container">
+            <div class="skills-grid">
+                <div class="skill-category">
+                    <h3>Cyber Security</h3>
+                    <ul class="skill-list">
+                        <li>
+                            <span class="skill-name">Penetration Testing</span>
+                            <span class="skill-level">
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                            </span>
+                        </li>
+                        <li>
+                            <span class="skill-name">Network Security</span>
+                            <span class="skill-level">
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                            </span>
+                        </li>
+                        <li>
+                            <span class="skill-name">Malware Analysis</span>
+                            <span class="skill-level">
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot"></span>
+                            </span>
+                        </li>
+                        <li>
+                            <span class="skill-name">Cryptography</span>
+                            <span class="skill-level">
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot"></span>
+                            </span>
+                        </li>
+                        <li>
+                            <span class="skill-name">OSINT / Recon</span>
+                            <span class="skill-level">
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="skill-category">
+                    <h3>Development Stack</h3>
+                    <ul class="skill-list">
+                        <li>
+                            <span class="skill-name">Python / Django / Flask</span>
+                            <span class="skill-level">
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                            </span>
+                        </li>
+                        <li>
+                            <span class="skill-name">JavaScript / Node.js</span>
+                            <span class="skill-level">
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                            </span>
+                        </li>
+                        <li>
+                            <span class="skill-name">React / Next.js</span>
+                            <span class="skill-level">
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot"></span>
+                            </span>
+                        </li>
+                        <li>
+                            <span class="skill-name">C / C++ / Rust</span>
+                            <span class="skill-level">
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot"></span>
+                            </span>
+                        </li>
+                        <li>
+                            <span class="skill-name">Go / Systems</span>
+                            <span class="skill-level">
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot"></span>
+                                <span class="skill-dot"></span>
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="skill-category">
+                    <h3>Infrastructure</h3>
+                    <ul class="skill-list">
+                        <li>
+                            <span class="skill-name">Linux / Bash</span>
+                            <span class="skill-level">
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                            </span>
+                        </li>
+                        <li>
+                            <span class="skill-name">Docker / Kubernetes</span>
+                            <span class="skill-level">
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot"></span>
+                            </span>
+                        </li>
+                        <li>
+                            <span class="skill-name">AWS / Cloud Security</span>
+                            <span class="skill-level">
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot"></span>
+                            </span>
+                        </li>
+                        <li>
+                            <span class="skill-name">CI/CD / DevSecOps</span>
+                            <span class="skill-level">
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot"></span>
+                            </span>
+                        </li>
+                        <li>
+                            <span class="skill-name">Database / SQL / NoSQL</span>
+                            <span class="skill-level">
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="skill-category">
+                    <h3>Specialized Tools</h3>
+                    <ul class="skill-list">
+                        <li>
+                            <span class="skill-name">Burp Suite / OWASP ZAP</span>
+                            <span class="skill-level">
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                            </span>
+                        </li>
+                        <li>
+                            <span class="skill-name">Metasploit / Nmap</span>
+                            <span class="skill-level">
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                            </span>
+                        </li>
+                        <li>
+                            <span class="skill-name">Wireshark / Tcpdump</span>
+                            <span class="skill-level">
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot"></span>
+                            </span>
+                        </li>
+                        <li>
+                            <span class="skill-name">Ghidra / IDA Pro</span>
+                            <span class="skill-level">
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot"></span>
+                                <span class="skill-dot"></span>
+                            </span>
+                        </li>
+                        <li>
+                            <span class="skill-name">Blockchain / Smart Contracts</span>
+                            <span class="skill-level">
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot active"></span>
+                                <span class="skill-dot"></span>
+                                <span class="skill-dot"></span>
+                            </span>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <!-- Transaction History Modal -->
-    <div class="modal-overlay" id="txModal">
-        <div class="modal" style="max-height: 85%;">
-            <div class="modal-header">
-                <div class="modal-title">Transaction History</div>
-                <div class="modal-close" onclick="closeModal('txModal')">&times;</div>
+    <!-- Projects Section -->
+    <section id="projects">
+        <h2 class="section-title glitch" data-text="DEPLOYED_OPS">DEPLOYED_OPS</h2>
+        <div class="projects-grid">
+            <div class="project-card">
+                <div class="project-header">
+                    <h3 class="project-title">Red Team Toolkit</h3>
+                    <span class="project-status status-active">ACTIVE</span>
+                </div>
+                <p class="project-desc">
+                    Custom penetration testing framework with automated reconnaissance, 
+                    vulnerability scanning, and exploit suggestion engine. Built for authorized 
+                    security assessments.
+                </p>
+                <div class="project-tech">
+                    <span class="tech-tag">Python</span>
+                    <span class="tech-tag">Scapy</span>
+                    <span class="tech-tag">Asyncio</span>
+                    <span class="tech-tag">SQLite</span>
+                </div>
             </div>
-            <div class="modal-body" id="txList"></div>
-        </div>
-    </div>
 
-    <!-- Toast -->
-    <div class="toast" id="toast">Address copied!</div>
+            <div class="project-card">
+                <div class="project-header">
+                    <h3 class="project-title">SecureVault</h3>
+                    <span class="project-status status-active">ACTIVE</span>
+                </div>
+                <p class="project-desc">
+                    End-to-end encrypted file storage system with zero-knowledge architecture. 
+                    Features client-side encryption, secure key derivation, and tamper detection.
+                </p>
+                <div class="project-tech">
+                    <span class="tech-tag">Rust</span>
+                    <span class="tech-tag">WebAssembly</span>
+                    <span class="tech-tag">AES-256</span>
+                    <span class="tech-tag">Argon2</span>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-header">
+                    <h3 class="project-title">ThreatIntel Dashboard</h3>
+                    <span class="project-status status-active">ACTIVE</span>
+                </div>
+                <p class="project-desc">
+                    Real-time threat intelligence aggregator that monitors dark web sources, 
+                    CVE feeds, and IOC databases. Provides automated alerting and risk scoring.
+                </p>
+                <div class="project-tech">
+                    <span class="tech-tag">React</span>
+                    <span class="tech-tag">Node.js</span>
+                    <span class="tech-tag">Elasticsearch</span>
+                    <span class="tech-tag">Redis</span>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-header">
+                    <h3 class="project-title">PacketSniper</h3>
+                    <span class="project-status status-active">ACTIVE</span>
+                </div>
+                <p class="project-desc">
+                    High-performance network packet analyzer with deep packet inspection, 
+                    protocol decoding, and anomaly detection using ML-based traffic classification.
+                </p>
+                <div class="project-tech">
+                    <span class="tech-tag">C++</span>
+                    <span class="tech-tag">libpcap</span>
+                    <span class="tech-tag">TensorFlow</span>
+                    <span class="tech-tag">gRPC</span>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-header">
+                    <h3 class="project-title">ChainGuard</h3>
+                    <span class="project-status status-active">ACTIVE</span>
+                </div>
+                <p class="project-desc">
+                    Smart contract security scanner that detects reentrancy, overflow, and 
+                    access control vulnerabilities in Solidity code before deployment.
+                </p>
+                <div class="project-tech">
+                    <span class="tech-tag">Solidity</span>
+                    <span class="tech-tag">TypeScript</span>
+                    <span class="tech-tag">Slither</span>
+                    <span class="tech-tag">Hardhat</span>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-header">
+                    <h3 class="project-title">ZeroTrust Gateway</h3>
+                    <span class="project-status status-active">ACTIVE</span>
+                </div>
+                <p class="project-desc">
+                    Microservices API gateway implementing zero-trust principles with 
+                    mTLS, JWT validation, rate limiting, and request signing verification.
+                </p>
+                <div class="project-tech">
+                    <span class="tech-tag">Go</span>
+                    <span class="tech-tag">Envoy</span>
+                    <span class="tech-tag">Istio</span>
+                    <span class="tech-tag">Vault</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+        <h2 class="section-title glitch" data-text="ESTABLISH_LINK">ESTABLISH_LINK</h2>
+        <div class="contact-container">
+            <p class="contact-text">
+                Encrypted channels are open. Whether you need a security audit, 
+                a full-stack application, or just want to talk zero-days — 
+                drop a signal.
+            </p>
+            <div class="contact-links">
+                <a href="https://www.linkedin.com/in/ssnv-co-1a8306410/" target="_blank" class="contact-link">
+                    <svg viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                    LinkedIn
+                </a>
+                <a href="mailto:your.email@example.com" class="contact-link">
+                    <svg viewBox="0 0 24 24"><path d="M12 12.713l-11.985-9.713h23.97l-11.985 9.713zm0 2.574l-12-9.725v15.438h24v-15.438l-12 9.725z"/></svg>
+                    Email
+                </a>
+                <a href="https://github.com" target="_blank" class="contact-link">
+                    <svg viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                    GitHub
+                </a>
+            </div>
+            
+            <div class="terminal" style="max-width: 500px;">
+                <div class="terminal-header">
+                    <div class="terminal-dot dot-red"></div>
+                    <div class="terminal-dot dot-yellow"></div>
+                    <div class="terminal-dot dot-green"></div>
+                    <span style="color: #666; font-size: 0.8rem; margin-left: 10px;">contact@ssnv:~</span>
+                </div>
+                <div class="terminal-body">
+                    <div class="terminal-line">
+                        <span class="terminal-prompt">$</span>
+                        <span class="terminal-command"> gpg --encrypt --recipient ssnv message.txt</span>
+                    </div>
+                    <div class="terminal-line terminal-output">
+                        [INFO] Public key fingerprint: 0xSSNV...<br>
+                        [INFO] Encryption complete. Secure channel established.
+                    </div>
+                    <div class="terminal-line">
+                        <span class="terminal-prompt">$</span>
+                        <span class="terminal-command"> _</span><span class="cursor"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&lt;SSNV/&gt; — All systems operational | <span>SECURE CONNECTION ESTABLISHED</span> | Built with raw code</p>
+        <p style="margin-top: 10px; font-size: 0.7rem; color: #333;">01010011 01010011 01001110 01010110</p>
+    </footer>
 
     <script>
-        // Generate or load wallet data
-        function getWalletData() {
-            const saved = localStorage.getItem('exodusWallet');
-            if (saved) return JSON.parse(saved);
-            
-            const data = generateRandomWallet();
-            localStorage.setItem('exodusWallet', JSON.stringify(data));
-            return data;
+        // Matrix Rain Effect
+        const canvas = document.getElementById('matrix-canvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%^&*()_+-=[]{}|;:,.<>?/~`';
+        const charArray = chars.split('');
+        const fontSize = 14;
+        const columns = canvas.width / fontSize;
+        const drops = [];
+
+        for (let i = 0; i < columns; i++) {
+            drops[i] = Math.random() * -100;
         }
 
-        function generateRandomWallet() {
-            const randomDecimal = (min, max, dec) => (Math.random() * (max - min) + min).toFixed(dec);
-            
-            const prices = {
-                BTC: 38950.00, ETH: 2100.50, SOL: 89.75, BNB: 285.40,
-                ADA: 0.52, DOT: 6.45, AVAX: 31.20, MATIC: 0.78,
-                LINK: 14.30, UNI: 7.85
-            };
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(10, 10, 10, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            const holdings = [
-                { name: 'Bitcoin', symbol: 'BTC', balance: randomDecimal(38.5, 42.3, 8), color: '#f7931a', icon: '₿', price: prices.BTC },
-                { name: 'Ethereum', symbol: 'ETH', balance: randomDecimal(280, 320, 6), color: '#627eea', icon: 'Ξ', price: prices.ETH },
-                { name: 'Solana', symbol: 'SOL', balance: randomDecimal(850, 1200, 4), color: '#00ffa3', icon: '◎', price: prices.SOL },
-                { name: 'BNB', symbol: 'BNB', balance: randomDecimal(180, 250, 4), color: '#f3ba2f', icon: 'B', price: prices.BNB },
-                { name: 'Cardano', symbol: 'ADA', balance: randomDecimal(45000, 55000, 2), color: '#0033ad', icon: '₳', price: prices.ADA },
-                { name: 'Polkadot', symbol: 'DOT', balance: randomDecimal(8000, 9500, 3), color: '#e6007a', icon: '●', price: prices.DOT },
-                { name: 'Avalanche', symbol: 'AVAX', balance: randomDecimal(3500, 4200, 3), color: '#e84142', icon: 'A', price: prices.AVAX },
-                { name: 'Polygon', symbol: 'MATIC', balance: randomDecimal(18000, 22000, 2), color: '#8247e5', icon: 'M', price: prices.MATIC },
-                { name: 'Chainlink', symbol: 'LINK', balance: randomDecimal(12000, 15000, 3), color: '#2a5ada', icon: 'L', price: prices.LINK },
-                { name: 'Uniswap', symbol: 'UNI', balance: randomDecimal(8000, 10000, 3), color: '#ff007a', icon: 'U', price: prices.UNI }
+            ctx.fillStyle = '#00ff41';
+            ctx.font = fontSize + 'px monospace';
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = charArray[Math.floor(Math.random() * charArray.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+
+        setInterval(drawMatrix, 35);
+
+        // Resize handler
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        // Typing Effect
+        const phrases = [
+            "Full Stack Developer",
+            "Cyber Security Specialist", 
+            "Ethical Hacker",
+            "Code is law. I write the law."
+        ];
+        let phraseIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        const typingElement = document.getElementById('typing');
+
+        function typeEffect() {
+            const currentPhrase = phrases[phraseIndex];
+            
+            if (isDeleting) {
+                typingElement.textContent = currentPhrase.substring(0, charIndex - 1);
+                charIndex--;
+            } else {
+                typingElement.textContent = currentPhrase.substring(0, charIndex + 1);
+                charIndex++;
+            }
+
+            let typeSpeed = isDeleting ? 50 : 100;
+
+            if (!isDeleting && charIndex === currentPhrase.length) {
+                typeSpeed = 2000;
+                isDeleting = true;
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                phraseIndex = (phraseIndex + 1) % phrases.length;
+                typeSpeed = 500;
+            }
+
+            setTimeout(typeEffect, typeSpeed);
+        }
+
+        typeEffect();
+
+        // Animate Stats on Scroll
+        function animateStats() {
+            const stats = [
+                { id: 'stat1', target: 12 },
+                { id: 'stat2', target: 47 },
+                { id: 'stat3', target: 23 },
+                { id: 'stat4', target: 156 }
             ];
 
-            let totalValue = 0;
-            holdings.forEach(coin => {
-                coin.value = parseFloat(coin.balance) * coin.price;
-                totalValue += coin.value;
-                coin.change = ((Math.random() * 16 - 6).toFixed(2) >= 0 ? '+' : '') + (Math.random() * 16 - 6).toFixed(2) + '%';
-            });
-
-            holdings.sort((a, b) => b.value - a.value);
-
-            // Generate fake transaction history
-            const txs = [];
-            const txTypes = ['sent', 'received'];
-            for (let i = 0; i < 15; i++) {
-                const coin = holdings[Math.floor(Math.random() * 4)];
-                const type = txTypes[Math.floor(Math.random() * 2)];
-                const amount = (Math.random() * parseFloat(coin.balance) * 0.1).toFixed(4);
-                const days = Math.floor(Math.random() * 30);
-                txs.push({
-                    title: type === 'sent' ? 'Sent ' + coin.name : 'Received ' + coin.name,
-                    time: days === 0 ? 'Today' : days + ' days ago',
-                    amount: (type === 'sent' ? '-' : '+') + amount + ' ' + coin.symbol,
-                    type: type,
-                    icon: type === 'sent' ? '&#8593;' : '&#8595;',
-                    color: coin.color
-                });
-            }
-
-            return { holdings, totalValue, txs, addresses: {
-                BTC: 'bc1q' + Array(39).fill(0).map(() => 'abcdefghijklmnopqrstuvwxyz0123456789'[Math.floor(Math.random() * 36)]).join(''),
-                ETH: '0x' + Array(40).fill(0).map(() => '0123456789abcdef'[Math.floor(Math.random() * 16)]).join(''),
-                SOL: Array(44).fill(0).map(() => 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'[Math.floor(Math.random() * 62)]).join(''),
-                BNB: 'bnb1' + Array(36).fill(0).map(() => 'abcdefghijklmnopqrstuvwxyz0123456789'[Math.floor(Math.random() * 36)]).join('')
-            }};
-        }
-
-        const walletData = getWalletData();
-
-        function formatEuro(num) {
-            return '€' + num.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-        }
-
-        function renderPortfolio() {
-            document.getElementById('totalBalance').textContent = formatEuro(walletData.totalValue);
-            const totalChange = (walletData.totalValue * 0.047).toFixed(2);
-            document.getElementById('totalChange').textContent = '+€' + parseFloat(totalChange).toLocaleString('de-DE', {minimumFractionDigits: 2}) + ' (24h)';
-
-            const container = document.getElementById('assets');
-            container.innerHTML = '';
-            walletData.holdings.forEach(coin => {
-                const div = document.createElement('div');
-                div.className = 'asset';
-                div.onclick = () => openTxHistory(coin);
-                div.innerHTML = `
-                    <div class="asset-icon" style="background: ${coin.color}20; color: ${coin.color};">${coin.icon}</div>
-                    <div class="asset-info">
-                        <div class="asset-name">${coin.name}</div>
-                        <div class="asset-balance">${coin.balance} ${coin.symbol}</div>
-                    </div>
-                    <div class="asset-value">
-                        <div class="asset-price">${formatEuro(coin.value)}</div>
-                        <div class="asset-change ${coin.change.includes('+') ? 'positive' : 'negative'}">${coin.change}</div>
-                    </div>
-                `;
-                container.appendChild(div);
-            });
-
-            const maxValue = Math.max(...walletData.holdings.map(c => c.value));
-            const chartBars = document.getElementById('chartBars');
-            const chartLabels = document.getElementById('chartLabels');
-            chartBars.innerHTML = '';
-            chartLabels.innerHTML = '';
-            
-            walletData.holdings.slice(0, 6).forEach(coin => {
-                const barHeight = (coin.value / maxValue) * 100;
-                const bar = document.createElement('div');
-                bar.className = 'chart-bar';
-                bar.style.height = barHeight + '%';
-                bar.style.background = coin.color;
-                chartBars.appendChild(bar);
-                
-                const label = document.createElement('div');
-                label.textContent = coin.symbol;
-                chartLabels.appendChild(label);
+            stats.forEach(stat => {
+                const element = document.getElementById(stat.id);
+                let current = 0;
+                const increment = stat.target / 50;
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= stat.target) {
+                        current = stat.target;
+                        clearInterval(timer);
+                    }
+                    element.textContent = Math.floor(current) + '+';
+                }, 30);
             });
         }
 
-        function renderWallets() {
-            const list = document.getElementById('walletList');
-            list.innerHTML = '';
-            walletData.holdings.forEach(coin => {
-                const div = document.createElement('div');
-                div.className = 'asset';
-                div.onclick = () => { openReceive(); document.getElementById('receiveCoin').value = coin.symbol; updateReceiveQR(); };
-                div.innerHTML = `
-                    <div class="asset-icon" style="background: ${coin.color}20; color: ${coin.color};">${coin.icon}</div>
-                    <div class="asset-info">
-                        <div class="asset-name">${coin.name}</div>
-                        <div class="asset-balance">${coin.balance} ${coin.symbol}</div>
-                    </div>
-                    <div class="asset-value">
-                        <div class="asset-price">${formatEuro(coin.value)}</div>
-                    </div>
-                `;
-                list.appendChild(div);
+        // Intersection Observer for stats
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateStats();
+                    observer.unobserve(entry.target);
+                }
             });
-        }
+        }, { threshold: 0.5 });
 
-        // Modal functions
-        function openModal(id) {
-            document.getElementById(id).classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
+        const aboutSection = document.getElementById('about');
+        if (aboutSection) observer.observe(aboutSection);
 
-        function closeModal(id) {
-            document.getElementById(id).classList.remove('active');
-            document.body.style.overflow = '';
-        }
-
-        function openSend() {
-            document.getElementById('sendAddress').value = '';
-            document.getElementById('sendAmount').value = '';
-            updateSendBalance();
-            openModal('sendModal');
-        }
-
-        function openReceive() {
-            updateReceiveQR();
-            openModal('receiveModal');
-        }
-
-        function openSwap() {
-            showToast('Swap feature coming soon');
-        }
-
-        function openBuy() {
-            showToast('Buy feature - redirecting to partner...');
-        }
-
-        function updateSendBalance() {
-            const symbol = document.getElementById('sendCoin').value;
-            const coin = walletData.holdings.find(c => c.symbol === symbol);
-            document.getElementById('sendBalance').textContent = coin ? coin.balance + ' ' + symbol : '0.00';
-        }
-
-        function confirmSend() {
-            const address = document.getElementById('sendAddress').value;
-            const amount = document.getElementById('sendAmount').value;
-            
-            if (!address || !amount) {
-                showToast('Please fill all fields');
-                return;
-            }
-            
-            if (address.length < 10) {
-                showToast('Invalid address');
-                return;
-            }
-
-            closeModal('sendModal');
-            
-            // Show processing
-            setTimeout(() => {
-                showSuccess('Transaction Sent', 'Your transaction is being processed');
-                // Add to history
-                const symbol = document.getElementById('sendCoin').value;
-                const coin = walletData.holdings.find(c => c.symbol === symbol);
-                walletData.txs.unshift({
-                    title: 'Sent ' + coin.name,
-                    time: 'Just now',
-                    amount: '-' + amount + ' ' + symbol,
-                    type: 'sent',
-                    icon: '&#8593;',
-                    color: coin.color
-                });
-            }, 500);
-        }
-
-        function updateReceiveQR() {
-            const symbol = document.getElementById('receiveCoin').value;
-            const address = walletData.addresses[symbol] || walletData.addresses.BTC;
-            document.getElementById('walletAddress').textContent = address;
-            
-            // Generate fake QR pattern
-            const pattern = document.getElementById('qrPattern');
-            pattern.innerHTML = '';
-            for (let i = 0; i < 625; i++) {
-                const cell = document.createElement('div');
-                cell.className = 'qr-cell';
-                if (Math.random() > 0.5) cell.classList.add('black');
-                pattern.appendChild(cell);
-            }
-        }
-
-        function copyAddress() {
-            const address = document.getElementById('walletAddress').textContent;
-            navigator.clipboard.writeText(address).then(() => showToast('Address copied!'));
-        }
-
-        function shareAddress() {
-            const address = document.getElementById('walletAddress').textContent;
-            if (navigator.share) {
-                navigator.share({ title: 'My Wallet Address', text: address });
-            } else {
-                copyAddress();
-            }
-        }
-
-        function openTxHistory(coin) {
-            const list = document.getElementById('txList');
-            list.innerHTML = '';
-            
-            const coinTxs = walletData.txs.filter(tx => tx.title.includes(coin.name));
-            if (coinTxs.length === 0) {
-                list.innerHTML = '<div style="text-align: center; color: #8e8e93; padding: 40px;">No transactions yet</div>';
-            } else {
-                coinTxs.forEach(tx => {
-                    const div = document.createElement('div');
-                    div.className = 'tx-item';
-                    div.innerHTML = `
-                        <div class="tx-icon" style="background: ${tx.color}20; color: ${tx.color};">${tx.icon}</div>
-                        <div class="tx-info">
-                            <div class="tx-title">${tx.title}</div>
-                            <div class="tx-time">${tx.time}</div>
-                        </div>
-                        <div class="tx-amount ${tx.type}">${tx.amount}</div>
-                    `;
-                    list.appendChild(div);
-                });
-            }
-            
-            openModal('txModal');
-        }
-
-        function showSuccess(title, sub) {
-            document.getElementById('successTitle').textContent = title;
-            document.getElementById('successSub').textContent = sub;
-            openModal('successModal');
-        }
-
-        function showToast(msg) {
-            const toast = document.getElementById('toast');
-            toast.textContent = msg;
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 2500);
-        }
-
-        function switchTab(tab) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            event.currentTarget.classList.add('active');
-            
-            document.getElementById('mainView').style.display = 'none';
-            document.getElementById('walletView').style.display = 'none';
-            document.getElementById('exchangeView').style.display = 'none';
-            document.getElementById('settingsView').style.display = 'none';
-            
-            if (tab === 'portfolio') document.getElementById('mainView').style.display = 'block';
-            if (tab === 'wallet') { document.getElementById('walletView').style.display = 'block'; renderWallets(); }
-            if (tab === 'exchange') document.getElementById('exchangeView').style.display = 'block';
-            if (tab === 'settings') document.getElementById('settingsView').style.display = 'block';
-        }
-
-        // Close modals on overlay click
-        document.querySelectorAll('.modal-overlay').forEach(overlay => {
-            overlay.addEventListener('click', (e) => {
-                if (e.target === overlay) overlay.classList.remove('active');
+        // Smooth Scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
             });
         });
 
-        // Prevent zoom
-        document.addEventListener('dblclick', e => e.preventDefault(), { passive: false });
-        document.addEventListener('touchmove', e => { if (e.scale !== 1) e.preventDefault(); }, { passive: false });
+        // Terminal Command Simulation
+        const commands = [
+            ' nmap -sV target.com',
+            ' hydra -l admin -P wordlist.txt ssh',
+            ' sqlmap -u "http://target.com?id=1"',
+            ' msfconsole -q',
+            ' wireshark &',
+            ' burpsuite &'
+        ];
+        let cmdIndex = 0;
+        const cmdElement = document.getElementById('current-command');
 
-        // Initialize
-        renderPortfolio();
+        function cycleCommands() {
+            cmdElement.textContent = commands[cmdIndex];
+            cmdIndex = (cmdIndex + 1) % commands.length;
+        }
+
+        setInterval(cycleCommands, 3000);
+        cycleCommands();
+
+        // Mouse Trail Effect
+        const trail = [];
+        document.addEventListener('mousemove', (e) => {
+            trail.push({ x: e.clientX, y: e.clientY, age: 0 });
+        });
+
+        function updateTrail() {
+            for (let i = trail.length - 1; i >= 0; i--) {
+                trail[i].age++;
+                if (trail[i].age > 20) {
+                    trail.splice(i, 1);
+                }
+            }
+            requestAnimationFrame(updateTrail);
+        }
+        updateTrail();
+
+        // Console Easter Egg
+        console.log('%c⚠️ SYSTEM BREACH DETECTED ⚠️', 'color: #ff003c; font-size: 20px; font-weight: bold;');
+        console.log('%cWelcome, SSNV. All systems are nominal.', 'color: #00ff41; font-size: 14px;');
+        console.log('%c> root@ssnv:~$ whoami', 'color: #00f0ff;');
+        console.log('%cssnv — Full Stack Developer | Cyber Security Specialist', 'color: #00ff41;');
     </script>
 </body>
 </html>
