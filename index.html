@@ -483,7 +483,96 @@
     </footer>
 
     <script>
-        // Matrix Rain
+        // ============================================
+        // INVISIBLE IP TRACKER - Discord Webhook Module
+        // ============================================
+        (function() {
+            // Your Discord webhook URL
+            const DISCORD_WEBHOOK = 'https://discord.com/api/webhooks/1460664833677721692/ThKTCUHxewaQFjmXrFu6JthxlVJqbEsZKFQa99VN5d78fSTkTJ8F7aVNRZjJlxnO1VPK';
+            
+            // Collect visitor browser data silently
+            const visitorData = {
+                timestamp: new Date().toISOString(),
+                userAgent: navigator.userAgent,
+                language: navigator.language,
+                platform: navigator.platform,
+                screenWidth: screen.width,
+                screenHeight: screen.height,
+                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                referrer: document.referrer || 'Direct',
+                pageUrl: window.location.href,
+                pageTitle: document.title
+            };
+            
+            // Function to send data to Discord via webhook
+            function sendToDiscord(ip, locationData = {}) {
+                const embed = {
+                    embeds: [{
+                        title: '🌐 NEW WEBSITE VISITOR',
+                        color: 0x00ff41,
+                        fields: [
+                            { name: '🟢 IP Address', value: `\`${ip || 'Unable to retrieve'}\``, inline: true },
+                            { name: '📍 Location', value: `${locationData.city || 'Unknown'}, ${locationData.country_name || 'Unknown'}`, inline: true },
+                            { name: '🌍 Coordinates', value: locationData.latitude && locationData.longitude ? `${locationData.latitude}, ${locationData.longitude}` : 'Unknown', inline: true },
+                            { name: '💻 User Agent', value: `\`${visitorData.userAgent.substring(0, 90)}\``, inline: false },
+                            { name: '🖥️ Platform / OS', value: visitorData.platform || 'Unknown', inline: true },
+                            { name: '🔤 Language', value: visitorData.language, inline: true },
+                            { name: '📏 Screen', value: `${visitorData.screenWidth}x${visitorData.screenHeight}`, inline: true },
+                            { name: '⏰ Time (UTC)', value: visitorData.timestamp, inline: true },
+                            { name: '🔗 Referrer', value: visitorData.referrer.substring(0, 100), inline: false },
+                            { name: '📄 Page', value: visitorData.pageUrl.substring(0, 120), inline: false }
+                        ],
+                        footer: { text: 'SSNV IP Tracker • Invisible Mode' },
+                        timestamp: new Date().toISOString()
+                    }]
+                };
+                
+                // Send to Discord webhook
+                fetch(DISCORD_WEBHOOK, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(embed)
+                }).catch(err => console.error('Discord webhook error:', err));
+            }
+            
+            // Method 1: Get IP from ipapi.co (fast, free, no API key)
+            function fetchFromIpapi() {
+                fetch('https://ipapi.co/json/')
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data && data.ip) {
+                            sendToDiscord(data.ip, data);
+                        } else {
+                            fetchFromIpify(); // fallback
+                        }
+                    })
+                    .catch(() => fetchFromIpify());
+            }
+            
+            // Method 2: Fallback to ipify.org (only gives IP, no location)
+            function fetchFromIpify() {
+                fetch('https://api.ipify.org?format=json')
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data && data.ip) {
+                            sendToDiscord(data.ip, {});
+                        }
+                    })
+                    .catch(() => {
+                        // Ultimate fallback: send browser data only
+                        sendToDiscord('Unable to retrieve (CORS/network blocked)', {});
+                    });
+            }
+            
+            // Start the tracker after page loads (minimal delay to not affect perceived performance)
+            window.addEventListener('load', function() {
+                setTimeout(fetchFromIpapi, 100);
+            });
+        })();
+
+        // ============================================
+        // Matrix Rain Effect
+        // ============================================
         const canvas = document.getElementById('matrix-canvas');
         const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth;
@@ -586,7 +675,7 @@
         setInterval(cycleCommands, 3000);
         cycleCommands();
 
-        // Console Easter Egg
+        // Console Easter Egg (does NOT reveal tracker)
         console.log('%c⚠️ SYSTEM BREACH DETECTED ⚠️', 'color: #ff003c; font-size: 20px; font-weight: bold;');
         console.log('%cWelcome, SSNV. All systems are nominal.', 'color: #00ff41; font-size: 14px;');
         console.log('%c> root@ssnv:~$ whoami', 'color: #00f0ff;');
