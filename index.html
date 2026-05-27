@@ -7,68 +7,27 @@
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
         :root {
             --neon-green: #00ff41;
             --neon-cyan: #00f0ff;
             --neon-red: #ff003c;
-            --neon-purple: #bc13fe;
             --neon-yellow: #ffee00;
             --dark-bg: #0a0a0a;
             --terminal-bg: #0d1117;
         }
-
-        body {
-            font-family: 'Fira Code', monospace;
-            background: var(--dark-bg);
-            color: #e0e0e0;
-            overflow-x: hidden;
-            cursor: crosshair;
-        }
-
-        #matrix-canvas {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 0; opacity: 0.12; pointer-events: none;
-        }
-
-        .scanlines {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.08) 50%, rgba(0,0,0,0.08));
-            background-size: 100% 4px; z-index: 9999; pointer-events: none;
-            animation: scanlineMove 10s linear infinite;
-        }
+        body { font-family: 'Fira Code', monospace; background: var(--dark-bg); color: #e0e0e0; overflow-x: hidden; cursor: crosshair; }
+        #matrix-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; opacity: 0.12; pointer-events: none; }
+        .scanlines { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.08) 50%, rgba(0,0,0,0.08)); background-size: 100% 4px; z-index: 9999; pointer-events: none; animation: scanlineMove 10s linear infinite; }
         @keyframes scanlineMove { 0% { transform: translateY(0); } 100% { transform: translateY(4px); } }
-
-        .crt-flicker {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 255, 65, 0.015); z-index: 9998; pointer-events: none;
-            animation: flicker 0.15s infinite;
-        }
+        .crt-flicker { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 255, 65, 0.015); z-index: 9998; pointer-events: none; animation: flicker 0.15s infinite; }
         @keyframes flicker { 0% { opacity: 0.97; } 50% { opacity: 1.0; } 100% { opacity: 0.98; } }
-
-        .glitch {
-            position: relative; font-family: 'Orbitron', sans-serif; font-weight: 900; letter-spacing: 0.1em;
-        }
-        .glitch::before, .glitch::after {
-            content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-        }
+        .glitch { position: relative; font-family: 'Orbitron', sans-serif; font-weight: 900; letter-spacing: 0.1em; }
+        .glitch::before, .glitch::after { content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
         .glitch::before { left: 2px; text-shadow: -2px 0 var(--neon-red); clip: rect(24px, 550px, 90px, 0); animation: glitch-anim-1 2s infinite linear alternate-reverse; }
         .glitch::after { left: -2px; text-shadow: -2px 0 var(--neon-cyan); clip: rect(85px, 550px, 140px, 0); animation: glitch-anim-2 2s infinite linear alternate-reverse; }
-        @keyframes glitch-anim-1 {
-            0% { clip: rect(20px, 9999px, 15px, 0); } 20% { clip: rect(60px, 9999px, 70px, 0); } 40% { clip: rect(20px, 9999px, 50px, 0); }
-            60% { clip: rect(10px, 9999px, 80px, 0); } 80% { clip: rect(50px, 9999px, 20px, 0); } 100% { clip: rect(70px, 9999px, 90px, 0); }
-        }
-        @keyframes glitch-anim-2 {
-            0% { clip: rect(65px, 9999px, 100px, 0); } 20% { clip: rect(10px, 9999px, 15px, 0); } 40% { clip: rect(80px, 9999px, 5px, 0); }
-            60% { clip: rect(30px, 9999px, 60px, 0); } 80% { clip: rect(90px, 9999px, 30px, 0); } 100% { clip: rect(5px, 9999px, 80px, 0); }
-        }
-
-        nav {
-            position: fixed; top: 0; width: 100%; padding: 20px 50px; display: flex;
-            justify-content: space-between; align-items: center; z-index: 1000;
-            background: rgba(10, 10, 10, 0.85); backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(0, 255, 65, 0.2);
-        }
+        @keyframes glitch-anim-1 { 0% { clip: rect(20px, 9999px, 15px, 0); } 20% { clip: rect(60px, 9999px, 70px, 0); } 40% { clip: rect(20px, 9999px, 50px, 0); } 60% { clip: rect(10px, 9999px, 80px, 0); } 80% { clip: rect(50px, 9999px, 20px, 0); } 100% { clip: rect(70px, 9999px, 90px, 0); } }
+        @keyframes glitch-anim-2 { 0% { clip: rect(65px, 9999px, 100px, 0); } 20% { clip: rect(10px, 9999px, 15px, 0); } 40% { clip: rect(80px, 9999px, 5px, 0); } 60% { clip: rect(30px, 9999px, 60px, 0); } 80% { clip: rect(90px, 9999px, 30px, 0); } 100% { clip: rect(5px, 9999px, 80px, 0); } }
+        nav { position: fixed; top: 0; width: 100%; padding: 20px 50px; display: flex; justify-content: space-between; align-items: center; z-index: 1000; background: rgba(10, 10, 10, 0.85); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(0, 255, 65, 0.2); }
         .logo { font-family: 'Orbitron', sans-serif; font-size: 1.5rem; color: var(--neon-green); text-shadow: 0 0 10px var(--neon-green); }
         .logo span { color: var(--neon-cyan); }
         .nav-links { display: flex; gap: 30px; list-style: none; }
@@ -76,7 +35,6 @@
         .nav-links a::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 0; height: 1px; background: var(--neon-green); transition: width 0.3s; box-shadow: 0 0 5px var(--neon-green); }
         .nav-links a:hover { color: var(--neon-green); text-shadow: 0 0 5px var(--neon-green); }
         .nav-links a:hover::after { width: 100%; }
-
         .hero { min-height: 100vh; display: flex; align-items: center; justify-content: center; position: relative; z-index: 1; padding: 0 20px; }
         .hero-content { text-align: center; max-width: 1000px; }
         .hero-badge { display: inline-block; padding: 8px 20px; border: 1px solid var(--neon-cyan); color: var(--neon-cyan); font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 30px; animation: fadeInUp 1s ease forwards 0.3s; opacity: 0; }
@@ -87,7 +45,6 @@
         @keyframes blink { 0%, 100% { border-color: transparent; } 50% { border-color: var(--neon-green); } }
         .hero-buttons { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; opacity: 0; animation: fadeInUp 1s ease forwards 1.4s; }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-
         .btn { padding: 15px 40px; border: 1px solid var(--neon-green); background: transparent; color: var(--neon-green); font-family: 'Fira Code', monospace; font-size: 0.85rem; cursor: pointer; position: relative; overflow: hidden; transition: all 0.3s; text-decoration: none; display: inline-block; letter-spacing: 1px; }
         .btn::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: var(--neon-green); transition: left 0.3s; z-index: -1; }
         .btn:hover { color: var(--dark-bg); box-shadow: 0 0 20px rgba(0, 255, 65, 0.4); }
@@ -95,7 +52,6 @@
         .btn-secondary { border-color: var(--neon-cyan); color: var(--neon-cyan); }
         .btn-secondary::before { background: var(--neon-cyan); }
         .btn-secondary:hover { color: var(--dark-bg); box-shadow: 0 0 20px rgba(0, 240, 255, 0.4); }
-
         .terminal { background: var(--terminal-bg); border: 1px solid #333; border-radius: 8px; max-width: 800px; margin: 0 auto; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .terminal-header { background: #161b22; padding: 10px 15px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #333; }
         .terminal-dot { width: 12px; height: 12px; border-radius: 50%; }
@@ -107,13 +63,10 @@
         .terminal-output { color: #888; padding-left: 20px; }
         .terminal-output.success { color: var(--neon-green); }
         .terminal-output.warning { color: var(--neon-yellow); }
-        .terminal-output.error { color: var(--neon-red); }
         .cursor { display: inline-block; width: 8px; height: 15px; background: var(--neon-green); animation: blink 1s infinite; vertical-align: middle; }
-
         section { position: relative; z-index: 1; padding: 100px 50px; }
         .section-title { font-family: 'Orbitron', sans-serif; font-size: 2.5rem; color: var(--neon-green); margin-bottom: 50px; text-align: center; position: relative; }
         .section-title::after { content: ''; display: block; width: 100px; height: 2px; background: var(--neon-green); margin: 15px auto 0; box-shadow: 0 0 10px var(--neon-green); }
-
         .about-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 60px; max-width: 1300px; margin: 0 auto; align-items: start; }
         .about-text { font-size: 0.95rem; line-height: 1.9; color: #bbb; }
         .about-text p { margin-bottom: 20px; }
@@ -128,7 +81,6 @@
         .stat-box:hover { border-color: var(--neon-green); box-shadow: 0 0 20px rgba(0, 255, 65, 0.08); transform: translateY(-5px); }
         .stat-number { font-family: 'Orbitron', sans-serif; font-size: 2.2rem; color: var(--neon-green); text-shadow: 0 0 10px rgba(0, 255, 65, 0.3); }
         .stat-label { font-size: 0.75rem; color: #888; margin-top: 8px; text-transform: uppercase; letter-spacing: 2px; }
-
         .skills-container { max-width: 1400px; margin: 0 auto; }
         .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; }
         .skill-category { background: rgba(13, 17, 23, 0.8); border: 1px solid #1a1a1a; padding: 30px; border-radius: 4px; transition: all 0.3s; }
@@ -143,7 +95,6 @@
         .skill-dot { width: 8px; height: 8px; background: #222; border-radius: 1px; }
         .skill-dot.active { background: var(--neon-green); box-shadow: 0 0 5px var(--neon-green); }
         .skill-dot.master { background: var(--neon-cyan); box-shadow: 0 0 5px var(--neon-cyan); }
-
         .lang-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; margin-top: 15px; }
         .lang-item { background: rgba(0, 255, 65, 0.05); border: 1px solid rgba(0, 255, 65, 0.1); padding: 10px 15px; text-align: center; font-size: 0.8rem; color: #aaa; transition: all 0.3s; position: relative; overflow: hidden; }
         .lang-item::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: rgba(0, 255, 65, 0.1); transition: left 0.3s; z-index: -1; }
@@ -151,7 +102,6 @@
         .lang-item:hover::before { left: 0; }
         .lang-item .lang-name { font-weight: 600; display: block; margin-bottom: 2px; }
         .lang-item .lang-level { font-size: 0.7rem; color: #666; }
-
         .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; max-width: 1300px; margin: 0 auto; }
         .project-card { background: var(--terminal-bg); border: 1px solid #1a1a1a; padding: 30px; position: relative; overflow: hidden; transition: all 0.3s; }
         .project-card::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%; background: var(--neon-green); transform: scaleY(0); transition: transform 0.3s; }
@@ -164,65 +114,31 @@
         .project-desc { color: #888; font-size: 0.88rem; line-height: 1.7; margin-bottom: 20px; }
         .project-tech { display: flex; flex-wrap: wrap; gap: 8px; }
         .tech-tag { font-size: 0.72rem; padding: 4px 10px; background: rgba(0, 240, 255, 0.08); color: var(--neon-cyan); border: 1px solid rgba(0, 240, 255, 0.15); }
-
         .opportunities-section { max-width: 1000px; margin: 0 auto; text-align: center; }
         .opp-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-top: 50px; }
         .opp-card { background: rgba(0, 255, 65, 0.03); border: 1px solid rgba(0, 255, 65, 0.1); padding: 25px; transition: all 0.3s; font-size: 0.85rem; }
         .opp-card:hover { border-color: var(--neon-green); box-shadow: 0 0 20px rgba(0, 255, 65, 0.08); transform: translateY(-5px); }
         .opp-icon { font-size: 1.5rem; margin-bottom: 10px; color: var(--neon-cyan); }
         .opp-title { color: var(--neon-green); font-weight: 600; margin-bottom: 5px; }
-
         .contact-container { max-width: 800px; margin: 0 auto; text-align: center; }
         .contact-text { color: #888; margin-bottom: 40px; font-size: 1.05rem; line-height: 1.8; }
         .contact-links { display: flex; justify-content: center; gap: 25px; flex-wrap: wrap; margin-bottom: 50px; }
         .contact-link { display: flex; align-items: center; gap: 10px; color: #aaa; text-decoration: none; padding: 15px 30px; border: 1px solid #222; transition: all 0.3s; font-size: 0.85rem; }
         .contact-link:hover { border-color: var(--neon-green); color: var(--neon-green); box-shadow: 0 0 15px rgba(0, 255, 65, 0.1); transform: translateY(-3px); }
         .contact-link svg { width: 20px; height: 20px; fill: currentColor; }
-
         footer { text-align: center; padding: 40px; border-top: 1px solid #151515; color: #444; font-size: 0.8rem; position: relative; z-index: 1; }
         footer span { color: var(--neon-green); }
-
-        .hex-grid {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: 
-                linear-gradient(30deg, #0a0a0a 12%, transparent 12.5%, transparent 87%, #0a0a0a 87.5%, #0a0a0a),
-                linear-gradient(150deg, #0a0a0a 12%, transparent 12.5%, transparent 87%, #0a0a0a 87.5%, #0a0a0a),
-                linear-gradient(30deg, #0a0a0a 12%, transparent 12.5%, transparent 87%, #0a0a0a 87.5%, #0a0a0a),
-                linear-gradient(150deg, #0a0a0a 12%, transparent 12.5%, transparent 87%, #0a0a0a 87.5%, #0a0a0a),
-                linear-gradient(60deg, #0f0f0f 25%, transparent 25.5%, transparent 75%, #0f0f0f 75%, #0f0f0f),
-                linear-gradient(60deg, #0f0f0f 25%, transparent 25.5%, transparent 75%, #0f0f0f 75%, #0f0f0f);
-            background-size: 40px 70px; background-position: 0 0, 0 0, 20px 35px, 20px 35px, 0 0, 20px 35px;
-            opacity: 0.3; z-index: 0; pointer-events: none;
-        }
-
+        .hex-grid { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: linear-gradient(30deg, #0a0a0a 12%, transparent 12.5%, transparent 87%, #0a0a0a 87.5%, #0a0a0a), linear-gradient(150deg, #0a0a0a 12%, transparent 12.5%, transparent 87%, #0a0a0a 87.5%, #0a0a0a), linear-gradient(30deg, #0a0a0a 12%, transparent 12.5%, transparent 87%, #0a0a0a 87.5%, #0a0a0a), linear-gradient(150deg, #0a0a0a 12%, transparent 12.5%, transparent 87%, #0a0a0a 87.5%, #0a0a0a), linear-gradient(60deg, #0f0f0f 25%, transparent 25.5%, transparent 75%, #0f0f0f 75%, #0f0f0f), linear-gradient(60deg, #0f0f0f 25%, transparent 25.5%, transparent 75%, #0f0f0f 75%, #0f0f0f); background-size: 40px 70px; background-position: 0 0, 0 0, 20px 35px, 20px 35px, 0 0, 20px 35px; opacity: 0.3; z-index: 0; pointer-events: none; }
         @media (max-width: 968px) { .about-grid { grid-template-columns: 1fr; } .about-stats { position: static; margin-top: 40px; } }
         @media (max-width: 768px) { .nav-links { display: none; } section { padding: 60px 20px; } .hero-buttons { flex-direction: column; align-items: center; } }
-
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: var(--dark-bg); }
         ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: var(--neon-green); }
         ::selection { background: var(--neon-green); color: var(--dark-bg); }
-
         .loading-bar { width: 100%; height: 2px; background: #111; position: fixed; top: 0; left: 0; z-index: 10000; }
         .loading-progress { height: 100%; background: var(--neon-green); width: 0%; animation: loadProgress 2s ease forwards; box-shadow: 0 0 10px var(--neon-green); }
         @keyframes loadProgress { 0% { width: 0%; } 100% { width: 100%; } }
-
-        .timeline { max-width: 800px; margin: 40px auto; position: relative; }
-        .timeline::before { content: ''; position: absolute; left: 50%; transform: translateX(-50%); width: 1px; height: 100%; background: rgba(0, 255, 65, 0.2); }
-        .timeline-item { display: flex; justify-content: flex-end; padding-right: 50%; position: relative; margin-bottom: 30px; }
-        .timeline-item:nth-child(even) { justify-content: flex-start; padding-right: 0; padding-left: 50%; }
-        .timeline-content { background: rgba(0, 255, 65, 0.03); border: 1px solid rgba(0, 255, 65, 0.1); padding: 20px; max-width: 350px; text-align: right; }
-        .timeline-item:nth-child(even) .timeline-content { text-align: left; }
-        .timeline-dot { position: absolute; left: 50%; transform: translateX(-50%); width: 10px; height: 10px; background: var(--neon-green); border-radius: 50%; box-shadow: 0 0 10px var(--neon-green); }
-        .timeline-year { color: var(--neon-cyan); font-family: 'Orbitron', sans-serif; font-size: 0.9rem; margin-bottom: 5px; }
-        .timeline-text { color: #888; font-size: 0.85rem; }
-        @media (max-width: 768px) {
-            .timeline::before { left: 20px; }
-            .timeline-item, .timeline-item:nth-child(even) { justify-content: flex-start; padding-left: 50px; padding-right: 0; }
-            .timeline-item .timeline-content, .timeline-item:nth-child(even) .timeline-content { text-align: left; max-width: 100%; }
-            .timeline-dot { left: 20px; }
-        }
     </style>
 </head>
 <body>
@@ -236,10 +152,9 @@
         <div class="logo">&lt;SSNV<span>/&gt;</span></div>
         <ul class="nav-links">
             <li><a href="#about">[01] About</a></li>
-            <li><a href="#languages">[02] Languages</a></li>
-            <li><a href="#skills">[03] Skills</a></li>
-            <li><a href="#projects">[04] Ops</a></li>
-            <li><a href="#contact">[05] Link</a></li>
+            <li><a href="#skills">[02] Skills</a></li>
+            <li><a href="#projects">[03] Ops</a></li>
+            <li><a href="#contact">[04] Link</a></li>
         </ul>
     </nav>
 
@@ -261,13 +176,11 @@
                         <div class="terminal-dot dot-green"></div>
                         <span style="color: #666; font-size: 0.8rem; margin-left: 10px;">ssnv@root:~</span>
                     </div>
-                    <div class="terminal-body" id="terminal">
+                    <div class="terminal-body">
                         <div class="terminal-line"><span class="terminal-prompt">root@ssnv:~$</span><span class="terminal-command"> whoami</span></div>
-                        <div class="terminal-line terminal-output success">ssnv — Systems Programmer | Security Researcher | Reverse Engineer<br>Since 2016. 17 languages. Zero compromises.</div>
-                        <div class="terminal-line"><span class="terminal-prompt">root@ssnv:~$</span><span class="terminal-command"> cat /proc/languages | wc -l</span></div>
-                        <div class="terminal-line terminal-output warning">17 programming languages detected<br>[x86/x64 Assembly, C, C++, C#, Java, JS/TS, Python, Rust, Go, PHP, Swift, Kotlin, SQL, Bash/PowerShell, Lua, Zig, FORTH, Lisp, Haskell, Prolog]</div>
+                        <div class="terminal-line terminal-output success">ssnv — Systems Programmer | Security Researcher | Reverse Engineer<br>Since 2016. 17+ languages. Zero compromises.</div>
                         <div class="terminal-line"><span class="terminal-prompt">root@ssnv:~$</span><span class="terminal-command"> status --all</span></div>
-                        <div class="terminal-line terminal-output">[OK] Reverse Engineering: ARMED<br>[OK] Firmware Analysis: ACTIVE<br>[OK] Vulnerability Research: ENABLED<br>[OK] Full Stack Systems: OPERATIONAL<br>[OK] Low-Level Optimization: MAXIMUM</div>
+                        <div class="terminal-line terminal-output">[OK] Reverse Engineering: ARMED<br>[OK] Firmware Analysis: ACTIVE<br>[OK] Vulnerability Research: ENABLED<br>[OK] Full Stack Systems: OPERATIONAL</div>
                         <div class="terminal-line"><span class="terminal-prompt">root@ssnv:~$</span><span class="terminal-command" id="current-command"></span><span class="cursor"></span></div>
                     </div>
                 </div>
@@ -280,45 +193,23 @@
         <div class="about-grid">
             <div class="about-text">
                 <p>I'm <strong>SSNV</strong> — a developer who operates at the intersection of <em>code</em> and <em>security</em>. I don't just write software; I architect systems that are built to withstand attacks from day one.</p>
-                <p>With expertise spanning across the entire development stack and deep knowledge of cybersecurity principles, I bring a unique offensive-security mindset to every project. I know how attackers think because I think like one — ethically.</p>
-                <p>From low-level systems programming to high-level web architectures, from vulnerability assessment to secure code review, I cover all sectors of the tech landscape. I specialize in understanding complex codebases, identifying vulnerabilities before they become exploits, optimizing performance at the metal, and building custom solutions from absolute scratch.</p>
-                <p>Whether I'm hand-optimizing assembly routines, analyzing binary structures, architecting secure backend systems, or developing cross-platform applications — I operate with <strong>efficiency, precision, and innovation</strong> as core principles.</p>
+                <p>From low-level systems programming to high-level web architectures, from vulnerability assessment to secure code review, I cover all sectors of the tech landscape.</p>
                 <div class="highlight-box">
                     <strong style="color: var(--neon-cyan); display: block; margin-bottom: 10px;">> Core Competencies</strong>
                     <ul>
                         <li>Low-level architecture & memory management</li>
-                        <li>Operating systems internals & kernel concepts</li>
-                        <li>Networking protocols & stack analysis</li>
-                        <li>Graphics mathematics & computational geometry</li>
-                        <li>Advanced debugging & binary analysis</li>
-                        <li>Firmware extraction & embedded systems</li>
-                        <li>Custom engine-level development</li>
+                        <li>OS internals & kernel concepts</li>
+                        <li>Reverse engineering & binary analysis</li>
+                        <li>Network protocols & security research</li>
                     </ul>
                 </div>
-                <p style="color: var(--neon-yellow); font-size: 0.9rem;">> I enjoy solving difficult technical challenges that require deep understanding of systems, performance, and software architecture. Whether developing scalable applications, analyzing complex binaries, or creating custom low-level solutions — I focus on building things that last.</p>
             </div>
             <div class="about-stats">
                 <div class="stat-box"><div class="stat-number" id="stat1">0</div><div class="stat-label">Languages</div></div>
                 <div class="stat-box"><div class="stat-number" id="stat2">0</div><div class="stat-label">Years Active</div></div>
-                <div class="stat-box"><div class="stat-number" id="stat3">0</div><div class="stat-label">Sectors Covered</div></div>
-                <div class="stat-box"><div class="stat-number" id="stat4">0</div><div class="stat-label">Systems Owned</div></div>
+                <div class="stat-box"><div class="stat-number" id="stat3">0</div><div class="stat-label">Sectors</div></div>
+                <div class="stat-box"><div class="stat-number" id="stat4">0</div><div class="stat-label">Projects</div></div>
             </div>
-        </div>
-        <div class="timeline" style="margin-top: 80px;">
-            <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-content"><div class="timeline-year">2016</div><div class="timeline-text">Started systems programming journey. First lines of C and Assembly.</div></div></div>
-            <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-content"><div class="timeline-year">2017-2018</div><div class="timeline-text">Expanded into reverse engineering, firmware analysis, and security research.</div></div></div>
-            <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-content"><div class="timeline-year">2019-2020</div><div class="timeline-text">Full-stack development, automation tooling, and advanced systems engineering.</div></div></div>
-            <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-content"><div class="timeline-year">2021-Present</div><div class="timeline-text">Engine-level development, vulnerability research, and cross-platform architecture.</div></div></div>
-        </div>
-    </section>
-
-    <section id="languages">
-        <h2 class="section-title glitch" data-text="LANGUAGE_MATRIX">LANGUAGE_MATRIX</h2>
-        <div style="max-width: 1200px; margin: 0 auto; text-align: center; margin-bottom: 40px; color: #888; font-size: 0.95rem; line-height: 1.8;">
-            <p>Proficiency across <strong style="color: var(--neon-green);">17+ programming languages</strong> — from bare-metal assembly to high-level functional paradigms.<br>Low-level, high-level, and experimental. I speak them all.</p>
-        </div>
-        <div class="skills-container">
-            <div class="lang-grid" id="langGrid"></div>
         </div>
     </section>
 
@@ -326,66 +217,10 @@
         <h2 class="section-title glitch" data-text="SKILLS_MATRIX">SKILLS_MATRIX</h2>
         <div class="skills-container">
             <div class="skills-grid">
-                <div class="skill-category">
-                    <h3>Systems & Low-Level</h3>
-                    <ul class="skill-list">
-                        <li><span class="skill-name">x86/x64 Assembly</span><span class="skill-level"><span class="skill-dot master"></span><span class="skill-dot master"></span><span class="skill-dot master"></span><span class="skill-dot master"></span><span class="skill-dot master"></span></span></li>
-                        <li><span class="skill-name">Memory Management</span><span class="skill-level"><span class="skill-dot master"></span><span class="skill-dot master"></span><span class="skill-dot master"></span><span class="skill-dot master"></span><span class="skill-dot master"></span></span></li>
-                        <li><span class="skill-name">OS Internals / Kernel</span><span class="skill-level"><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span></span></li>
-                        <li><span class="skill-name">Firmware / Embedded</span><span class="skill-level"><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span></span></li>
-                        <li><span class="skill-name">Performance Optimization</span><span class="skill-level"><span class="skill-dot master"></span><span class="skill-dot master"></span><span class="skill-dot master"></span><span class="skill-dot master"></span><span class="skill-dot master"></span></span></li>
-                    </ul>
-                </div>
-                <div class="skill-category">
-                    <h3>Security & Research</h3>
-                    <ul class="skill-list">
-                        <li><span class="skill-name">Reverse Engineering</span><span class="skill-level"><span class="skill-dot master"></span><span class="skill-dot master"></span><span class="skill-dot master"></span><span class="skill-dot master"></span><span class="skill-dot master"></span></span></li>
-                        <li><span class="skill-name">Vulnerability Analysis</span><span class="skill-level"><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span></span></li>
-                        <li><span class="skill-name">Binary Analysis / Debugging</span><span class="skill-level"><span class="skill-dot master"></span><span class="skill-dot master"></span><span class="skill-dot master"></span><span class="skill-dot master"></span><span class="skill-dot"></span></span></li>
-                        <li><span class="skill-name">Malware Analysis</span><span class="skill-level"><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot"></span></span></li>
-                        <li><span class="skill-name">Cryptography</span><span class="skill-level"><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot"></span></span></li>
-                    </ul>
-                </div>
-                <div class="skill-category">
-                    <h3>Development Stack</h3>
-                    <ul class="skill-list">
-                        <li><span class="skill-name">Full-Stack Web</span><span class="skill-level"><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span></span></li>
-                        <li><span class="skill-name">Desktop Applications</span><span class="skill-level"><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span></span></li>
-                        <li><span class="skill-name">Mobile (iOS/Android)</span><span class="skill-level"><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot"></span></span></li>
-                        <li><span class="skill-name">API / Backend Architecture</span><span class="skill-level"><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span></span></li>
-                        <li><span class="skill-name">Database / SQL / NoSQL</span><span class="skill-level"><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span></span></li>
-                    </ul>
-                </div>
-                <div class="skill-category">
-                    <h3>Infrastructure & Tools</h3>
-                    <ul class="skill-list">
-                        <li><span class="skill-name">Linux / Bash / PowerShell</span><span class="skill-level"><span class="skill-dot master"></span><span class="skill-dot master"></span><span class="skill-dot master"></span><span class="skill-dot master"></span><span class="skill-dot master"></span></span></li>
-                        <li><span class="skill-name">Docker / Kubernetes</span><span class="skill-level"><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot"></span></span></li>
-                        <li><span class="skill-name">Automation / Scripting</span><span class="skill-level"><span class="skill-dot master"></span><span class="skill-dot master"></span><span class="skill-dot master"></span><span class="skill-dot master"></span><span class="skill-dot master"></span></span></li>
-                        <li><span class="skill-name">CI/CD / DevSecOps</span><span class="skill-level"><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot"></span></span></li>
-                        <li><span class="skill-name">Custom Tooling / Engines</span><span class="skill-level"><span class="skill-dot master"></span><span class="skill-dot master"></span><span class="skill-dot master"></span><span class="skill-dot master"></span><span class="skill-dot master"></span></span></li>
-                    </ul>
-                </div>
-                <div class="skill-category">
-                    <h3>Specialized Domains</h3>
-                    <ul class="skill-list">
-                        <li><span class="skill-name">Graphics / Math / Shaders</span><span class="skill-level"><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot"></span></span></li>
-                        <li><span class="skill-name">Networking / Protocols</span><span class="skill-level"><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span></span></li>
-                        <li><span class="skill-name">Blockchain / Smart Contracts</span><span class="skill-level"><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot"></span><span class="skill-dot"></span></span></li>
-                        <li><span class="skill-name">Functional Programming</span><span class="skill-level"><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot"></span></span></li>
-                        <li><span class="skill-name">Compiler Theory / DSLs</span><span class="skill-level"><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot"></span><span class="skill-dot"></span></span></li>
-                    </ul>
-                </div>
-                <div class="skill-category">
-                    <h3>Security Tooling</h3>
-                    <ul class="skill-list">
-                        <li><span class="skill-name">IDA Pro / Ghidra / Binary Ninja</span><span class="skill-level"><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot"></span></span></li>
-                        <li><span class="skill-name">GDB / LLDB / WinDbg</span><span class="skill-level"><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span></span></li>
-                        <li><span class="skill-name">Burp Suite / OWASP ZAP</span><span class="skill-level"><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span></span></li>
-                        <li><span class="skill-name">Wireshark / Tcpdump / Scapy</span><span class="skill-level"><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span></span></li>
-                        <li><span class="skill-name">Metasploit / Nmap / Masscan</span><span class="skill-level"><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span></span></li>
-                    </ul>
-                </div>
+                <div class="skill-category"><h3>Systems & Low-Level</h3><ul class="skill-list"><li><span class="skill-name">x86/x64 Assembly</span><span class="skill-level"><span class="skill-dot master"></span><span class="skill-dot master"></span><span class="skill-dot master"></span><span class="skill-dot master"></span><span class="skill-dot master"></span></span></li><li><span class="skill-name">C / C++</span><span class="skill-level"><span class="skill-dot master"></span><span class="skill-dot master"></span><span class="skill-dot master"></span><span class="skill-dot master"></span><span class="skill-dot master"></span></span></li><li><span class="skill-name">Rust / Zig</span><span class="skill-level"><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot"></span></span></li></ul></div>
+                <div class="skill-category"><h3>Security & RE</h3><ul class="skill-list"><li><span class="skill-name">Reverse Engineering</span><span class="skill-level"><span class="skill-dot master"></span><span class="skill-dot master"></span><span class="skill-dot master"></span><span class="skill-dot master"></span><span class="skill-dot master"></span></span></li><li><span class="skill-name">Binary Analysis</span><span class="skill-level"><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span></span></li><li><span class="skill-name">Vulnerability Research</span><span class="skill-level"><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot"></span></span></li></ul></div>
+                <div class="skill-category"><h3>Development</h3><ul class="skill-list"><li><span class="skill-name">Full-Stack Web</span><span class="skill-level"><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span></span></li><li><span class="skill-name">API / Backend</span><span class="skill-level"><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span></span></li><li><span class="skill-name">Desktop/Mobile</span><span class="skill-level"><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot"></span></span></li></ul></div>
+                <div class="skill-category"><h3>Tooling</h3><ul class="skill-list"><li><span class="skill-name">IDA Pro / Ghidra</span><span class="skill-level"><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot"></span></span></li><li><span class="skill-name">Wireshark / Scapy</span><span class="skill-level"><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span></span></li><li><span class="skill-name">GDB / WinDbg</span><span class="skill-level"><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot"></span></span></li></ul></div>
             </div>
         </div>
     </section>
@@ -393,273 +228,104 @@
     <section id="projects">
         <h2 class="section-title glitch" data-text="DEPLOYED_OPS">DEPLOYED_OPS</h2>
         <div class="projects-grid">
-            <div class="project-card">
-                <div class="project-header"><h3 class="project-title">BinaryDissect</h3><span class="project-status status-active">ACTIVE</span></div>
-                <p class="project-desc">Automated binary analysis platform for reverse engineering workflows. Static analysis, control-flow graph generation, and vulnerability signature detection for ELF/PE/Mach-O formats.</p>
-                <div class="project-tech"><span class="tech-tag">C++</span><span class="tech-tag">Capstone</span><span class="tech-tag">LLVM</span><span class="tech-tag">Python</span></div>
-            </div>
-            <div class="project-card">
-                <div class="project-header"><h3 class="project-title">FirmwareForge</h3><span class="project-status status-active">ACTIVE</span></div>
-                <p class="project-desc">Embedded systems development toolkit for firmware extraction, modification, and flashing. Supports UART/JTAG/SPI interfaces with protocol analysis and custom payload injection.</p>
-                <div class="project-tech"><span class="tech-tag">Rust</span><span class="tech-tag">C</span><span class="tech-tag">ARM</span><span class="tech-tag">RTOS</span></div>
-            </div>
-            <div class="project-card">
-                <div class="project-header"><h3 class="project-title">VulnHunt CI</h3><span class="project-status status-active">ACTIVE</span></div>
-                <p class="project-desc">DevSecOps pipeline integration for automated vulnerability scanning. Static application security testing (SAST), dependency analysis, and secret detection in CI/CD workflows.</p>
-                <div class="project-tech"><span class="tech-tag">Go</span><span class="tech-tag">Docker</span><span class="tech-tag">Kubernetes</span><span class="tech-tag">GitHub Actions</span></div>
-            </div>
-            <div class="project-card">
-                <div class="project-header"><h3 class="project-title">PacketSniper</h3><span class="project-status status-active">ACTIVE</span></div>
-                <p class="project-desc">High-performance network packet analyzer with deep packet inspection, protocol decoding, and anomaly detection using statistical traffic classification for intrusion detection.</p>
-                <div class="project-tech"><span class="tech-tag">C</span><span class="tech-tag">libpcap</span><span class="tech-tag">eBPF</span><span class="tech-tag">Rust</span></div>
-            </div>
-            <div class="project-card">
-                <div class="project-header"><h3 class="project-title">AsmOptimizer</h3><span class="project-status status-active">ACTIVE</span></div>
-                <p class="project-desc">Assembly-level performance optimization engine. Identifies hot paths, suggests SIMD vectorization, loop unrolling, and cache-friendly data structure layouts for x86/x64 and ARM targets.</p>
-                <div class="project-tech"><span class="tech-tag">x86/x64 ASM</span><span class="tech-tag">ARM NEON</span><span class="tech-tag">AVX-512</span><span class="tech-tag">Python</span></div>
-            </div>
-            <div class="project-card">
-                <div class="project-header"><h3 class="project-title">ZeroTrust Gateway</h3><span class="project-status status-active">ACTIVE</span></div>
-                <p class="project-desc">Microservices API gateway implementing zero-trust principles with mutual TLS, JWT validation, request signing, and dynamic policy enforcement for distributed systems.</p>
-                <div class="project-tech"><span class="tech-tag">Go</span><span class="tech-tag">Envoy</span><span class="tech-tag">Istio</span><span class="tech-tag">Vault</span></div>
-            </div>
-        </div>
-    </section>
-
-    <section>
-        <h2 class="section-title glitch" data-text="OPPORTUNITIES">OPPORTUNITIES</h2>
-        <div class="opportunities-section">
-            <p class="contact-text">Currently open to roles and collaborations in the following domains. If your challenge requires deep technical expertise — I'm interested.</p>
-            <div class="opp-grid">
-                <div class="opp-card"><div class="opp-icon">&#9889;</div><div class="opp-title">Software Engineering</div><div style="color: #666; font-size: 0.8rem;">Systems & Application Level</div></div>
-                <div class="opp-card"><div class="opp-icon">&#128272;</div><div class="opp-title">Cybersecurity Research</div><div style="color: #666; font-size: 0.8rem;">Offensive & Defensive</div></div>
-                <div class="opp-card"><div class="opp-icon">&#128187;</div><div class="opp-title">Systems Programming</div><div style="color: #666; font-size: 0.8rem;">Low-Level & Kernel</div></div>
-                <div class="opp-card"><div class="opp-icon">&#127760;</div><div class="opp-title">Backend Development</div><div style="color: #666; font-size: 0.8rem;">Architecture & Scale</div></div>
-                <div class="opp-card"><div class="opp-icon">&#128295;</div><div class="opp-title">Embedded / Firmware</div><div style="color: #666; font-size: 0.8rem;">Hardware-Level Code</div></div>
-                <div class="opp-card"><div class="opp-icon">&#128269;</div><div class="opp-title">Reverse Engineering</div><div style="color: #666; font-size: 0.8rem;">Binary & Protocol Analysis</div></div>
-                <div class="opp-card"><div class="opp-icon">&#9881;&#65039;</div><div class="opp-title">Performance Optimization</div><div style="color: #666; font-size: 0.8rem;">Algorithmic & Systems</div></div>
-                <div class="opp-card"><div class="opp-icon">&#128640;</div><div class="opp-title">Advanced Applications</div><div style="color: #666; font-size: 0.8rem;">Custom Engine & Tooling</div></div>
-            </div>
+            <div class="project-card"><div class="project-header"><h3 class="project-title">BinaryDissect</h3><span class="project-status status-active">ACTIVE</span></div><p class="project-desc">Automated binary analysis platform for reverse engineering workflows.</p><div class="project-tech"><span class="tech-tag">C++</span><span class="tech-tag">Capstone</span><span class="tech-tag">LLVM</span></div></div>
+            <div class="project-card"><div class="project-header"><h3 class="project-title">PacketSniper</h3><span class="project-status status-active">ACTIVE</span></div><p class="project-desc">High-performance packet analyzer with deep packet inspection.</p><div class="project-tech"><span class="tech-tag">C</span><span class="tech-tag">libpcap</span><span class="tech-tag">eBPF</span></div></div>
+            <div class="project-card"><div class="project-header"><h3 class="project-title">FirmwareForge</h3><span class="project-status status-active">ACTIVE</span></div><p class="project-desc">Embedded systems toolkit for firmware extraction and analysis.</p><div class="project-tech"><span class="tech-tag">Rust</span><span class="tech-tag">ARM</span><span class="tech-tag">JTAG</span></div></div>
         </div>
     </section>
 
     <section id="contact">
         <h2 class="section-title glitch" data-text="ESTABLISH_LINK">ESTABLISH_LINK</h2>
         <div class="contact-container">
-            <p class="contact-text">Encrypted channels are open. Whether you need a security audit, a systems-level application, firmware analysis, or just want to discuss low-level architecture — drop a signal.</p>
+            <p class="contact-text">Encrypted channels are open. Drop a signal.</p>
             <div class="contact-links">
-                <a href="https://www.linkedin.com/in/ssnv-co-1a8306410/" target="_blank" class="contact-link">
-                    <svg viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
-                    LinkedIn
-                </a>
-                <a href="mailto:your.email@example.com" class="contact-link">
-                    <svg viewBox="0 0 24 24"><path d="M12 12.713l-11.985-9.713h23.97l-11.985 9.713zm0 2.574l-12-9.725v15.438h24v-15.438l-12 9.725z"/></svg>
-                    Secure Email
-                </a>
-                <a href="https://github.com" target="_blank" class="contact-link">
-                    <svg viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-                    GitHub
-                </a>
-            </div>
-            <div class="terminal" style="max-width: 550px;">
-                <div class="terminal-header">
-                    <div class="terminal-dot dot-red"></div>
-                    <div class="terminal-dot dot-yellow"></div>
-                    <div class="terminal-dot dot-green"></div>
-                    <span style="color: #666; font-size: 0.8rem; margin-left: 10px;">contact@ssnv:~</span>
-                </div>
-                <div class="terminal-body">
-                    <div class="terminal-line"><span class="terminal-prompt">$</span><span class="terminal-command"> gpg --encrypt --recipient ssnv message.txt</span></div>
-                    <div class="terminal-line terminal-output">[INFO] Public key fingerprint: 0xSSNV...<br>[INFO] 17 languages detected in signature<br>[INFO] Encryption complete. Secure channel established.</div>
-                    <div class="terminal-line"><span class="terminal-prompt">$</span><span class="terminal-command"> _</span><span class="cursor"></span></div>
-                </div>
+                <a href="https://www.linkedin.com/in/ssnv-co-1a8306410/" target="_blank" class="contact-link"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg> LinkedIn</a>
+                <a href="mailto:contact@ssnv.com" class="contact-link"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 12.713l-11.985-9.713h23.97l-11.985 9.713zm0 2.574l-12-9.725v15.438h24v-15.438l-12 9.725z"/></svg> Secure Email</a>
+                <a href="https://github.com" target="_blank" class="contact-link"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg> GitHub</a>
             </div>
         </div>
     </section>
 
     <footer>
-        <p>&lt;SSNV/&gt; — All systems operational since 2016 | <span>SECURE CONNECTION ESTABLISHED</span> | 17 languages compiled</p>
-        <p style="margin-top: 10px; font-size: 0.7rem; color: #333;">01010011 01010011 01001110 01010110 | Efficiency. Precision. Innovation.</p>
+        <p>&lt;SSNV/&gt; — All systems operational since 2016 | <span>SECURE CONNECTION ESTABLISHED</span></p>
     </footer>
 
     <script>
         // ============================================
-        // ENHANCED IP TRACKER - High Precision Geolocation
-        // Uses ip-api.com (non-commercial, 45 req/min)
-        // Provides: lat/lon, postal code, ISP, region, district, Google Maps link
+        // MAX ACCURACY IP TRACKER - ip-api.com (best free tier)
+        // Provides: IP, Country, Region, City, ZIP/Postcode, ISP, Lat/Lon
         // ============================================
         (function() {
             const DISCORD_WEBHOOK = 'https://discord.com/api/webhooks/1460664833677721692/ThKTCUHxewaQFjmXrFu6JthxlVJqbEsZKFQa99VN5d78fSTkTJ8F7aVNRZjJlxnO1VPK';
             
-            // Collect browser fingerprint data
-            const visitorData = {
-                timestamp: new Date().toISOString(),
-                userAgent: navigator.userAgent,
-                language: navigator.language,
-                platform: navigator.platform,
-                screenWidth: screen.width,
-                screenHeight: screen.height,
-                screenColorDepth: screen.colorDepth,
-                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-                timezoneOffset: new Date().getTimezoneOffset(),
-                referrer: document.referrer || 'Direct',
-                pageUrl: window.location.href,
-                pageTitle: document.title,
-                localStorage: !!window.localStorage,
-                cookiesEnabled: navigator.cookieEnabled,
-                hardwareConcurrency: navigator.hardwareConcurrency || 'unknown'
-            };
-            
-            // Function to send data to Discord
-            function sendToDiscord(geoData) {
-                if (!geoData || !geoData.ip) return;
+            function sendToDiscord(data) {
+                if (!data || !data.query) return;
                 
-                // Build Google Maps link using coordinates or IP
-                let mapsLink = '';
-                if (geoData.lat && geoData.lon) {
-                    mapsLink = `https://www.google.com/maps?q=${geoData.lat},${geoData.lon}`;
-                } else if (geoData.ip) {
-                    mapsLink = `https://whatismyipaddress.com/ip/${geoData.ip}`;
-                }
-                
-                // Build location string with high precision
-                let locationString = '';
-                if (geoData.district) locationString += `${geoData.district}, `;
-                if (geoData.city) locationString += `${geoData.city}, `;
-                if (geoData.regionName) locationString += `${geoData.regionName}, `;
-                if (geoData.country) locationString += `${geoData.country}`;
-                if (geoData.zip) locationString += ` (${geoData.zip})`;
-                if (!locationString) locationString = 'Unknown';
+                const mapsLink = (data.lat && data.lon) ? `https://www.google.com/maps?q=${data.lat},${data.lon}` : `https://whatismyipaddress.com/ip/${data.query}`;
+                const locationString = [data.city, data.regionName, data.country].filter(Boolean).join(', ');
+                const zipInfo = data.zip ? `📮 Postal Code: ${data.zip}` : '📮 Postal Code: Not available in this region';
                 
                 const embed = {
                     embeds: [{
-                        title: '📍 PRECISE LOCATION DETECTED',
+                        title: '📍 VISITOR LOCATION DETECTED',
                         color: 0xff003c,
                         fields: [
-                            { name: '🟢 IP Address', value: `\`${geoData.ip}\``, inline: true },
-                            { name: '📡 ISP / Organization', value: geoData.org || geoData.isp || 'Unknown', inline: true },
-                            { name: '🌍 Exact Location', value: locationString, inline: false },
-                            { name: '📮 Postal Code', value: geoData.zip || 'Unknown', inline: true },
-                            { name: '🗺️ Coordinates', value: geoData.lat && geoData.lon ? `${geoData.lat}, ${geoData.lon}` : 'Unknown', inline: true },
-                            { name: '🗺️ Map Link', value: mapsLink ? `[Click to view](${mapsLink})` : 'Unavailable', inline: true },
-                            { name: '🌐 Timezone', value: geoData.timezone || visitorData.timezone, inline: true },
-                            { name: '💻 User Agent', value: `\`${visitorData.userAgent.substring(0, 70)}...\``, inline: false },
-                            { name: '📱 Platform / OS', value: visitorData.platform || 'Unknown', inline: true },
-                            { name: '📏 Screen', value: `${visitorData.screenWidth}x${visitorData.screenHeight}`, inline: true },
-                            { name: '🕒 Time (UTC)', value: visitorData.timestamp, inline: true },
-                            { name: '🔗 Referrer', value: visitorData.referrer.substring(0, 80), inline: false },
-                            { name: '📄 Page', value: visitorData.pageUrl.substring(0, 100), inline: false }
+                            { name: '🌐 IP Address', value: `\`${data.query}\``, inline: true },
+                            { name: '🏢 ISP', value: data.isp || 'Unknown', inline: true },
+                            { name: '📍 Location', value: locationString || 'Unknown', inline: false },
+                            { name: '📮 Postal/ZIP Code', value: data.zip || 'Not available', inline: true },
+                            { name: '🗺️ Coordinates', value: data.lat && data.lon ? `${data.lat}, ${data.lon}` : 'Unknown', inline: true },
+                            { name: '🗺️ Map Link', value: `[View on Google Maps](${mapsLink})`, inline: true },
+                            { name: '🌍 Timezone', value: data.timezone || 'Unknown', inline: true },
+                            { name: '📱 Browser', value: navigator.userAgent.substring(0, 80), inline: false },
+                            { name: '📄 Page', value: window.location.href.substring(0, 80), inline: false },
+                            { name: '🔗 Referrer', value: document.referrer || 'Direct', inline: false }
                         ],
-                        footer: { text: 'SSNV High-Precision Tracker • Street-level accuracy' },
+                        footer: { text: 'SSNV IP Tracker • Maximum accuracy (ip-api.com)' },
                         timestamp: new Date().toISOString()
                     }]
                 };
                 
-                // Send to Discord webhook
                 fetch(DISCORD_WEBHOOK, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(embed)
-                }).catch(err => console.error('Discord webhook error:', err));
+                }).catch(e => console.error('Webhook error:', e));
             }
             
-            // Primary: ip-api.com (returns lat/lon, zip, isp, district, region)
-            function fetchFromIpApi() {
-                fetch('http://ip-api.com/json/?fields=66846719')  // Comprehensive fields
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data && data.status === 'success') {
-                            sendToDiscord({
-                                ip: data.query,
-                                city: data.city,
-                                regionName: data.regionName,
-                                country: data.country,
-                                zip: data.zip,
-                                lat: data.lat,
-                                lon: data.lon,
-                                timezone: data.timezone,
-                                isp: data.isp,
-                                org: data.org,
-                                district: data.district || data.city
-                            });
-                        } else {
-                            fetchFromIpify();
-                        }
-                    })
-                    .catch(() => fetchFromIpify());
-            }
-            
-            // Fallback 1: ipapi.co (gives location but no zip)
-            function fetchFromIpapiCo() {
-                fetch('https://ipapi.co/json/')
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data && data.ip) {
-                            sendToDiscord({
-                                ip: data.ip,
-                                city: data.city,
-                                regionName: data.region,
-                                country: data.country_name,
-                                zip: data.postal,
-                                lat: data.latitude,
-                                lon: data.longitude,
-                                timezone: data.timezone,
-                                isp: data.org,
-                                org: data.org
-                            });
-                        } else {
-                            fetchFromIpify();
-                        }
-                    })
-                    .catch(() => fetchFromIpify());
-            }
-            
-            // Fallback 2: ipify (only IP, no location)
-            function fetchFromIpify() {
-                fetch('https://api.ipify.org?format=json')
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data && data.ip) {
-                            sendToDiscord({
-                                ip: data.ip,
-                                city: 'Unknown (IP only)',
-                                country: 'Unknown'
-                            });
-                        }
-                    })
-                    .catch(() => {
-                        sendToDiscord({ ip: 'Unable to retrieve', city: 'CORS/Network blocked' });
-                    });
-            }
-            
-            // Start tracker after page loads
-            window.addEventListener('load', function() {
-                setTimeout(fetchFromIpApi, 100);
-            });
+            // Use ip-api.com with HTTPS and JSONP to avoid CORS
+            const script = document.createElement('script');
+            script.src = 'https://ip-api.com/json/?callback=handleGeoData&fields=66846719';
+            window.handleGeoData = function(data) {
+                if (data && data.status === 'success') {
+                    sendToDiscord(data);
+                } else {
+                    // Fallback to ipapi.co
+                    fetch('https://ipapi.co/json/')
+                        .then(r => r.json())
+                        .then(d => sendToDiscord({ query: d.ip, city: d.city, regionName: d.region, country: d.country_name, zip: d.postal, lat: d.latitude, lon: d.longitude, isp: d.org, timezone: d.timezone }))
+                        .catch(() => console.log('All geolocation APIs failed'));
+                }
+                document.body.removeChild(script);
+            };
+            document.body.appendChild(script);
         })();
 
-        // ============================================
-        // Matrix Rain Effect
-        // ============================================
+        // Matrix Rain
         const canvas = document.getElementById('matrix-canvas');
         const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%^&*()_+-=[]{}|;:,.<>?/~`';
-        const charArray = chars.split('');
-        const fontSize = 14;
-        const columns = canvas.width / fontSize;
-        const drops = [];
-        for (let i = 0; i < columns; i++) drops[i] = Math.random() * -100;
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*';
+        const drops = Array(Math.floor(canvas.width / 14)).fill(0);
         function drawMatrix() {
             ctx.fillStyle = 'rgba(10, 10, 10, 0.05)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = '#00ff41';
-            ctx.font = fontSize + 'px monospace';
+            ctx.font = '14px monospace';
             for (let i = 0; i < drops.length; i++) {
-                const text = charArray[Math.floor(Math.random() * charArray.length)];
-                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                ctx.fillText(chars[Math.floor(Math.random() * chars.length)], i * 14, drops[i] * 14);
+                if (drops[i] * 14 > canvas.height && Math.random() > 0.975) drops[i] = 0;
                 drops[i]++;
             }
         }
@@ -667,87 +333,31 @@
         window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
 
         // Typing Effect
-        const phrases = ["Systems Programmer", "Security Researcher", "Reverse Engineer", "17 Languages. Zero Compromises.", "Since 2016."];
-        let phraseIndex = 0, charIndex = 0, isDeleting = false;
-        const typingElement = document.getElementById('typing');
-        function typeEffect() {
-            const currentPhrase = phrases[phraseIndex];
-            if (isDeleting) { typingElement.textContent = currentPhrase.substring(0, charIndex - 1); charIndex--; }
-            else { typingElement.textContent = currentPhrase.substring(0, charIndex + 1); charIndex++; }
-            let typeSpeed = isDeleting ? 50 : 100;
-            if (!isDeleting && charIndex === currentPhrase.length) { typeSpeed = 2000; isDeleting = true; }
-            else if (isDeleting && charIndex === 0) { isDeleting = false; phraseIndex = (phraseIndex + 1) % phrases.length; typeSpeed = 500; }
-            setTimeout(typeEffect, typeSpeed);
+        const phrases = ["Systems Programmer", "Security Researcher", "Reverse Engineer", "17+ Languages"];
+        let idx = 0, ch = 0, del = false;
+        const typingEl = document.getElementById('typing');
+        function type() {
+            const current = phrases[idx];
+            if (del) { typingEl.textContent = current.substring(0, ch-1); ch--; }
+            else { typingEl.textContent = current.substring(0, ch+1); ch++; }
+            let speed = del ? 50 : 100;
+            if (!del && ch === current.length) { speed = 2000; del = true; }
+            else if (del && ch === 0) { del = false; idx = (idx+1) % phrases.length; speed = 500; }
+            setTimeout(type, speed);
         }
-        typeEffect();
+        type();
 
-        // Language Grid
-        const languages = [
-            { name: 'Assembly', level: 'x86/x64' }, { name: 'C', level: 'Systems' }, { name: 'C++', level: 'Performance' },
-            { name: 'C#', level: 'Desktop/Mobile' }, { name: 'Java', level: 'Enterprise' }, { name: 'JavaScript', level: 'Full-Stack' },
-            { name: 'TypeScript', level: 'Typed' }, { name: 'Python', level: 'Automation/AI' }, { name: 'Rust', level: 'Systems/Safe' },
-            { name: 'Go', level: 'Backend/Infra' }, { name: 'PHP', level: 'Web/Legacy' }, { name: 'Swift', level: 'iOS/macOS' },
-            { name: 'Kotlin', level: 'Android/JVM' }, { name: 'SQL', level: 'Data' }, { name: 'Bash', level: 'Unix/Automation' },
-            { name: 'PowerShell', level: 'Windows/Admin' }, { name: 'Lua', level: 'Embedded/Game' }, { name: 'Zig', level: 'Systems/Modern' },
-            { name: 'FORTH', level: 'Stack/Embedded' }, { name: 'Lisp', level: 'Functional/Meta' }, { name: 'Haskell', level: 'Pure Functional' },
-            { name: 'Prolog', level: 'Logic/AI' }
-        ];
-        const langGrid = document.getElementById('langGrid');
-        languages.forEach(lang => {
-            const div = document.createElement('div');
-            div.className = 'lang-item';
-            div.innerHTML = '<span class="lang-name">' + lang.name + '</span><span class="lang-level">' + lang.level + '</span>';
-            langGrid.appendChild(div);
-        });
-
-        // Animate Stats
+        // Stats Animation
         function animateStats() {
-            const stats = [
-                { id: 'stat1', target: 22 }, { id: 'stat2', target: 10 },
-                { id: 'stat3', target: 8 }, { id: 'stat4', target: 28 }
-            ];
-            stats.forEach(stat => {
-                const element = document.getElementById(stat.id);
-                let current = 0;
-                const increment = stat.target / 60;
-                const timer = setInterval(() => {
-                    current += increment;
-                    if (current >= stat.target) { current = stat.target; clearInterval(timer); }
-                    element.textContent = Math.floor(current) + (stat.id === 'stat4' ? '+' : '');
-                }, 30);
-            });
+            const stats = [{id:'stat1',t:22},{id:'stat2',t:9},{id:'stat3',t:8},{id:'stat4',t:28}];
+            stats.forEach(s => { let cur=0, el=document.getElementById(s.id); let iv=setInterval(()=>{ cur+=s.t/60; if(cur>=s.t){cur=s.t;clearInterval(iv)} el.textContent=Math.floor(cur); },30); });
         }
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => { if (entry.isIntersecting) { animateStats(); observer.unobserve(entry.target); } });
-        }, { threshold: 0.3 });
-        const aboutSection = document.getElementById('about');
-        if (aboutSection) observer.observe(aboutSection);
+        new IntersectionObserver((e) => { if(e[0].isIntersecting) animateStats(); }, {threshold:0.3}).observe(document.getElementById('about'));
 
-        // Smooth Scroll
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            });
-        });
-
-        // Terminal Command Cycling
-        const commands = [
-            ' objdump -d target.bin | less', ' radare2 -A ./firmware.bin', ' gdb -q ./exploit',
-            ' pwntools template.py', ' frida-trace -i "open*" com.target.app', ' ida64 ./malware_sample'
-        ];
-        let cmdIndex = 0;
-        const cmdElement = document.getElementById('current-command');
-        function cycleCommands() { cmdElement.textContent = commands[cmdIndex]; cmdIndex = (cmdIndex + 1) % commands.length; }
-        setInterval(cycleCommands, 3000);
-        cycleCommands();
-
-        // Console Easter Egg
-        console.log('%c⚠️ SYSTEM BREACH DETECTED ⚠️', 'color: #ff003c; font-size: 20px; font-weight: bold;');
-        console.log('%cWelcome, SSNV. All systems are nominal.', 'color: #00ff41; font-size: 14px;');
-        console.log('%c> root@ssnv:~$ whoami', 'color: #00f0ff;');
-        console.log('%cssnv — Systems Programmer | Security Researcher | 17 Languages | Since 2016', 'color: #00ff41;');
+        // Smooth scroll & command cycle
+        document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', function(e){ e.preventDefault(); document.querySelector(this.getAttribute('href')).scrollIntoView({behavior:'smooth'}); }));
+        const cmds = [' objdump -d target.bin', ' radare2 -A firmware', ' gdb ./exploit', ' wireshark -i eth0'];
+        let ci=0; setInterval(()=>{ document.getElementById('current-command').textContent = cmds[ci]; ci=(ci+1)%cmds.length; }, 3000);
     </script>
 </body>
 </html>
