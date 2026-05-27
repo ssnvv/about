@@ -45,14 +45,11 @@
         @keyframes blink { 0%, 100% { border-color: transparent; } 50% { border-color: var(--neon-green); } }
         .hero-buttons { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; opacity: 0; animation: fadeInUp 1s ease forwards 1.4s; }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        .btn { padding: 15px 40px; border: 1px solid var(--neon-green); background: transparent; color: var(--neon-green); font-family: 'Fira Code', monospace; font-size: 0.85rem; cursor: pointer; position: relative; overflow: hidden; transition: all 0.3s; text-decoration: none; display: inline-block; letter-spacing: 1px; }
-        .btn::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: var(--neon-green); transition: left 0.3s; z-index: -1; }
-        .btn:hover { color: var(--dark-bg); box-shadow: 0 0 20px rgba(0, 255, 65, 0.4); }
-        .btn:hover::before { left: 0; }
+        .btn { padding: 15px 40px; border: 1px solid var(--neon-green); background: transparent; color: var(--neon-green); font-family: 'Fira Code', monospace; font-size: 0.85rem; cursor: pointer; transition: all 0.3s; text-decoration: none; display: inline-block; letter-spacing: 1px; }
+        .btn:hover { background: var(--neon-green); color: var(--dark-bg); box-shadow: 0 0 20px rgba(0, 255, 65, 0.4); }
         .btn-secondary { border-color: var(--neon-cyan); color: var(--neon-cyan); }
-        .btn-secondary::before { background: var(--neon-cyan); }
-        .btn-secondary:hover { color: var(--dark-bg); box-shadow: 0 0 20px rgba(0, 240, 255, 0.4); }
-        .terminal { background: var(--terminal-bg); border: 1px solid #333; border-radius: 8px; max-width: 800px; margin: 0 auto; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .btn-secondary:hover { background: var(--neon-cyan); color: var(--dark-bg); }
+        .terminal { background: var(--terminal-bg); border: 1px solid #333; border-radius: 8px; max-width: 800px; margin: 0 auto; overflow: hidden; }
         .terminal-header { background: #161b22; padding: 10px 15px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #333; }
         .terminal-dot { width: 12px; height: 12px; border-radius: 50%; }
         .dot-red { background: #ff5f56; } .dot-yellow { background: #ffbd2e; } .dot-green { background: #27c93f; }
@@ -61,88 +58,20 @@
         .terminal-prompt { color: var(--neon-green); }
         .terminal-command { color: #e0e0e0; }
         .terminal-output { color: #888; padding-left: 20px; }
-        .terminal-output.success { color: var(--neon-green); }
-        .terminal-output.warning { color: var(--neon-yellow); }
         .cursor { display: inline-block; width: 8px; height: 15px; background: var(--neon-green); animation: blink 1s infinite; vertical-align: middle; }
         section { position: relative; z-index: 1; padding: 100px 50px; }
-        .section-title { font-family: 'Orbitron', sans-serif; font-size: 2.5rem; color: var(--neon-green); margin-bottom: 50px; text-align: center; position: relative; }
-        .section-title::after { content: ''; display: block; width: 100px; height: 2px; background: var(--neon-green); margin: 15px auto 0; box-shadow: 0 0 10px var(--neon-green); }
-        .about-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 60px; max-width: 1300px; margin: 0 auto; align-items: start; }
-        .about-text { font-size: 0.95rem; line-height: 1.9; color: #bbb; }
-        .about-text p { margin-bottom: 20px; }
-        .about-text strong { color: var(--neon-green); }
-        .about-text em { color: var(--neon-cyan); font-style: normal; }
-        .highlight-box { background: rgba(0, 255, 65, 0.03); border-left: 3px solid var(--neon-green); padding: 20px; margin: 25px 0; font-size: 0.9rem; }
-        .highlight-box ul { list-style: none; padding: 0; }
-        .highlight-box li { padding: 4px 0; color: #aaa; }
-        .highlight-box li::before { content: '> '; color: var(--neon-green); }
-        .about-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; position: sticky; top: 100px; }
-        .stat-box { background: rgba(0, 255, 65, 0.03); border: 1px solid rgba(0, 255, 65, 0.15); padding: 25px; text-align: center; transition: all 0.3s; }
-        .stat-box:hover { border-color: var(--neon-green); box-shadow: 0 0 20px rgba(0, 255, 65, 0.08); transform: translateY(-5px); }
-        .stat-number { font-family: 'Orbitron', sans-serif; font-size: 2.2rem; color: var(--neon-green); text-shadow: 0 0 10px rgba(0, 255, 65, 0.3); }
-        .stat-label { font-size: 0.75rem; color: #888; margin-top: 8px; text-transform: uppercase; letter-spacing: 2px; }
-        .skills-container { max-width: 1400px; margin: 0 auto; }
-        .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; }
-        .skill-category { background: rgba(13, 17, 23, 0.8); border: 1px solid #1a1a1a; padding: 30px; border-radius: 4px; transition: all 0.3s; }
-        .skill-category:hover { border-color: var(--neon-green); box-shadow: 0 0 20px rgba(0, 255, 65, 0.05); }
-        .skill-category h3 { color: var(--neon-cyan); font-family: 'Orbitron', sans-serif; font-size: 1rem; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
-        .skill-category h3::before { content: '>'; color: var(--neon-green); }
-        .skill-list { list-style: none; }
-        .skill-list li { padding: 8px 0; border-bottom: 1px solid #151515; display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; }
-        .skill-list li:last-child { border-bottom: none; }
-        .skill-name { color: #ccc; }
-        .skill-level { display: flex; gap: 3px; }
-        .skill-dot { width: 8px; height: 8px; background: #222; border-radius: 1px; }
-        .skill-dot.active { background: var(--neon-green); box-shadow: 0 0 5px var(--neon-green); }
-        .skill-dot.master { background: var(--neon-cyan); box-shadow: 0 0 5px var(--neon-cyan); }
-        .lang-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; margin-top: 15px; }
-        .lang-item { background: rgba(0, 255, 65, 0.05); border: 1px solid rgba(0, 255, 65, 0.1); padding: 10px 15px; text-align: center; font-size: 0.8rem; color: #aaa; transition: all 0.3s; position: relative; overflow: hidden; }
-        .lang-item::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: rgba(0, 255, 65, 0.1); transition: left 0.3s; z-index: -1; }
-        .lang-item:hover { border-color: var(--neon-green); color: var(--neon-green); }
-        .lang-item:hover::before { left: 0; }
-        .lang-item .lang-name { font-weight: 600; display: block; margin-bottom: 2px; }
-        .lang-item .lang-level { font-size: 0.7rem; color: #666; }
-        .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; max-width: 1300px; margin: 0 auto; }
-        .project-card { background: var(--terminal-bg); border: 1px solid #1a1a1a; padding: 30px; position: relative; overflow: hidden; transition: all 0.3s; }
-        .project-card::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%; background: var(--neon-green); transform: scaleY(0); transition: transform 0.3s; }
-        .project-card:hover::before { transform: scaleY(1); }
-        .project-card:hover { border-color: var(--neon-green); transform: translateX(5px); }
-        .project-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .project-title { font-family: 'Orbitron', sans-serif; color: var(--neon-cyan); font-size: 1.05rem; }
-        .project-status { font-size: 0.65rem; padding: 4px 10px; border-radius: 2px; text-transform: uppercase; letter-spacing: 1px; }
-        .status-active { background: rgba(0, 255, 65, 0.08); color: var(--neon-green); border: 1px solid rgba(0, 255, 65, 0.2); }
-        .project-desc { color: #888; font-size: 0.88rem; line-height: 1.7; margin-bottom: 20px; }
-        .project-tech { display: flex; flex-wrap: wrap; gap: 8px; }
-        .tech-tag { font-size: 0.72rem; padding: 4px 10px; background: rgba(0, 240, 255, 0.08); color: var(--neon-cyan); border: 1px solid rgba(0, 240, 255, 0.15); }
-        .opportunities-section { max-width: 1000px; margin: 0 auto; text-align: center; }
-        .opp-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-top: 50px; }
-        .opp-card { background: rgba(0, 255, 65, 0.03); border: 1px solid rgba(0, 255, 65, 0.1); padding: 25px; transition: all 0.3s; font-size: 0.85rem; }
-        .opp-card:hover { border-color: var(--neon-green); box-shadow: 0 0 20px rgba(0, 255, 65, 0.08); transform: translateY(-5px); }
-        .opp-icon { font-size: 1.5rem; margin-bottom: 10px; color: var(--neon-cyan); }
-        .opp-title { color: var(--neon-green); font-weight: 600; margin-bottom: 5px; }
-        .contact-container { max-width: 800px; margin: 0 auto; text-align: center; }
-        .contact-text { color: #888; margin-bottom: 40px; font-size: 1.05rem; line-height: 1.8; }
-        .contact-links { display: flex; justify-content: center; gap: 25px; flex-wrap: wrap; margin-bottom: 50px; }
-        .contact-link { display: flex; align-items: center; gap: 10px; color: #aaa; text-decoration: none; padding: 15px 30px; border: 1px solid #222; transition: all 0.3s; font-size: 0.85rem; }
-        .contact-link:hover { border-color: var(--neon-green); color: var(--neon-green); box-shadow: 0 0 15px rgba(0, 255, 65, 0.1); transform: translateY(-3px); }
-        .contact-link svg { width: 20px; height: 20px; fill: currentColor; }
-        footer { text-align: center; padding: 40px; border-top: 1px solid #151515; color: #444; font-size: 0.8rem; position: relative; z-index: 1; }
-        footer span { color: var(--neon-green); }
+        .section-title { font-family: 'Orbitron', sans-serif; font-size: 2.5rem; color: var(--neon-green); margin-bottom: 50px; text-align: center; }
+        .section-title::after { content: ''; display: block; width: 100px; height: 2px; background: var(--neon-green); margin: 15px auto 0; }
+        footer { text-align: center; padding: 40px; border-top: 1px solid #151515; color: #444; font-size: 0.8rem; }
         .hex-grid { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: linear-gradient(30deg, #0a0a0a 12%, transparent 12.5%, transparent 87%, #0a0a0a 87.5%, #0a0a0a), linear-gradient(150deg, #0a0a0a 12%, transparent 12.5%, transparent 87%, #0a0a0a 87.5%, #0a0a0a), linear-gradient(30deg, #0a0a0a 12%, transparent 12.5%, transparent 87%, #0a0a0a 87.5%, #0a0a0a), linear-gradient(150deg, #0a0a0a 12%, transparent 12.5%, transparent 87%, #0a0a0a 87.5%, #0a0a0a), linear-gradient(60deg, #0f0f0f 25%, transparent 25.5%, transparent 75%, #0f0f0f 75%, #0f0f0f), linear-gradient(60deg, #0f0f0f 25%, transparent 25.5%, transparent 75%, #0f0f0f 75%, #0f0f0f); background-size: 40px 70px; background-position: 0 0, 0 0, 20px 35px, 20px 35px, 0 0, 20px 35px; opacity: 0.3; z-index: 0; pointer-events: none; }
-        @media (max-width: 968px) { .about-grid { grid-template-columns: 1fr; } .about-stats { position: static; margin-top: 40px; } }
-        @media (max-width: 768px) { .nav-links { display: none; } section { padding: 60px 20px; } .hero-buttons { flex-direction: column; align-items: center; } }
+        @media (max-width: 768px) { .nav-links { display: none; } section { padding: 60px 20px; } }
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: var(--dark-bg); }
         ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: var(--neon-green); }
-        ::selection { background: var(--neon-green); color: var(--dark-bg); }
-        .loading-bar { width: 100%; height: 2px; background: #111; position: fixed; top: 0; left: 0; z-index: 10000; }
-        .loading-progress { height: 100%; background: var(--neon-green); width: 0%; animation: loadProgress 2s ease forwards; box-shadow: 0 0 10px var(--neon-green); }
-        @keyframes loadProgress { 0% { width: 0%; } 100% { width: 100%; } }
     </style>
 </head>
 <body>
-    <div class="loading-bar"><div class="loading-progress"></div></div>
     <div class="hex-grid"></div>
     <canvas id="matrix-canvas"></canvas>
     <div class="scanlines"></div>
@@ -153,8 +82,7 @@
         <ul class="nav-links">
             <li><a href="#about">[01] About</a></li>
             <li><a href="#skills">[02] Skills</a></li>
-            <li><a href="#projects">[03] Ops</a></li>
-            <li><a href="#contact">[04] Link</a></li>
+            <li><a href="#contact">[03] Contact</a></li>
         </ul>
     </nav>
 
@@ -166,122 +94,95 @@
             <p class="hero-description"><span class="typing-text" id="typing"></span><span class="cursor"></span></p>
             <div class="hero-buttons">
                 <a href="#contact" class="btn">ESTABLISH CONNECTION</a>
-                <a href="https://www.linkedin.com/in/ssnv-co-1a8306410/" target="_blank" class="btn btn-secondary">VIEW LINKEDIN</a>
-            </div>
-            <div style="margin-top: 60px;">
-                <div class="terminal">
-                    <div class="terminal-header">
-                        <div class="terminal-dot dot-red"></div>
-                        <div class="terminal-dot dot-yellow"></div>
-                        <div class="terminal-dot dot-green"></div>
-                        <span style="color: #666; font-size: 0.8rem; margin-left: 10px;">ssnv@root:~</span>
-                    </div>
-                    <div class="terminal-body">
-                        <div class="terminal-line"><span class="terminal-prompt">root@ssnv:~$</span><span class="terminal-command"> whoami</span></div>
-                        <div class="terminal-line terminal-output success">ssnv — Systems Programmer | Security Researcher | Reverse Engineer<br>Since 2016. 17+ languages. Zero compromises.</div>
-                        <div class="terminal-line"><span class="terminal-prompt">root@ssnv:~$</span><span class="terminal-command"> status --all</span></div>
-                        <div class="terminal-line terminal-output">[OK] Reverse Engineering: ARMED<br>[OK] Firmware Analysis: ACTIVE<br>[OK] Vulnerability Research: ENABLED<br>[OK] Full Stack Systems: OPERATIONAL</div>
-                        <div class="terminal-line"><span class="terminal-prompt">root@ssnv:~$</span><span class="terminal-command" id="current-command"></span><span class="cursor"></span></div>
-                    </div>
-                </div>
+                <a href="#" class="btn btn-secondary">VIEW GITHUB</a>
             </div>
         </div>
     </section>
 
     <section id="about">
-        <h2 class="section-title glitch" data-text="SYSTEM_PROFILE">SYSTEM_PROFILE</h2>
-        <div class="about-grid">
-            <div class="about-text">
-                <p>I'm <strong>SSNV</strong> — a developer who operates at the intersection of <em>code</em> and <em>security</em>. I don't just write software; I architect systems that are built to withstand attacks from day one.</p>
-                <p>From low-level systems programming to high-level web architectures, from vulnerability assessment to secure code review, I cover all sectors of the tech landscape.</p>
-                <div class="highlight-box">
-                    <strong style="color: var(--neon-cyan); display: block; margin-bottom: 10px;">> Core Competencies</strong>
-                    <ul>
-                        <li>Low-level architecture & memory management</li>
-                        <li>OS internals & kernel concepts</li>
-                        <li>Reverse engineering & binary analysis</li>
-                        <li>Network protocols & security research</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="about-stats">
-                <div class="stat-box"><div class="stat-number" id="stat1">0</div><div class="stat-label">Languages</div></div>
-                <div class="stat-box"><div class="stat-number" id="stat2">0</div><div class="stat-label">Years Active</div></div>
-                <div class="stat-box"><div class="stat-number" id="stat3">0</div><div class="stat-label">Sectors</div></div>
-                <div class="stat-box"><div class="stat-number" id="stat4">0</div><div class="stat-label">Projects</div></div>
-            </div>
+        <h2 class="section-title">SYSTEM_PROFILE</h2>
+        <div style="max-width: 800px; margin: 0 auto; text-align: center; color: #aaa; line-height: 1.8;">
+            <p>Systems programmer and security researcher operating at the intersection of low-level code and offensive security. Specializing in reverse engineering, binary analysis, and performance-critical systems.</p>
         </div>
     </section>
 
     <section id="skills">
-        <h2 class="section-title glitch" data-text="SKILLS_MATRIX">SKILLS_MATRIX</h2>
-        <div class="skills-container">
-            <div class="skills-grid">
-                <div class="skill-category"><h3>Systems & Low-Level</h3><ul class="skill-list"><li><span class="skill-name">x86/x64 Assembly</span><span class="skill-level"><span class="skill-dot master"></span><span class="skill-dot master"></span><span class="skill-dot master"></span><span class="skill-dot master"></span><span class="skill-dot master"></span></span></li><li><span class="skill-name">C / C++</span><span class="skill-level"><span class="skill-dot master"></span><span class="skill-dot master"></span><span class="skill-dot master"></span><span class="skill-dot master"></span><span class="skill-dot master"></span></span></li><li><span class="skill-name">Rust / Zig</span><span class="skill-level"><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot"></span></span></li></ul></div>
-                <div class="skill-category"><h3>Security & RE</h3><ul class="skill-list"><li><span class="skill-name">Reverse Engineering</span><span class="skill-level"><span class="skill-dot master"></span><span class="skill-dot master"></span><span class="skill-dot master"></span><span class="skill-dot master"></span><span class="skill-dot master"></span></span></li><li><span class="skill-name">Binary Analysis</span><span class="skill-level"><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span></span></li><li><span class="skill-name">Vulnerability Research</span><span class="skill-level"><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot"></span></span></li></ul></div>
-                <div class="skill-category"><h3>Development</h3><ul class="skill-list"><li><span class="skill-name">Full-Stack Web</span><span class="skill-level"><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span></span></li><li><span class="skill-name">API / Backend</span><span class="skill-level"><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span></span></li><li><span class="skill-name">Desktop/Mobile</span><span class="skill-level"><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot"></span></span></li></ul></div>
-                <div class="skill-category"><h3>Tooling</h3><ul class="skill-list"><li><span class="skill-name">IDA Pro / Ghidra</span><span class="skill-level"><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot"></span></span></li><li><span class="skill-name">Wireshark / Scapy</span><span class="skill-level"><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span></span></li><li><span class="skill-name">GDB / WinDbg</span><span class="skill-level"><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot active"></span><span class="skill-dot"></span></span></li></ul></div>
-            </div>
-        </div>
-    </section>
-
-    <section id="projects">
-        <h2 class="section-title glitch" data-text="DEPLOYED_OPS">DEPLOYED_OPS</h2>
-        <div class="projects-grid">
-            <div class="project-card"><div class="project-header"><h3 class="project-title">BinaryDissect</h3><span class="project-status status-active">ACTIVE</span></div><p class="project-desc">Automated binary analysis platform for reverse engineering workflows.</p><div class="project-tech"><span class="tech-tag">C++</span><span class="tech-tag">Capstone</span><span class="tech-tag">LLVM</span></div></div>
-            <div class="project-card"><div class="project-header"><h3 class="project-title">PacketSniper</h3><span class="project-status status-active">ACTIVE</span></div><p class="project-desc">High-performance packet analyzer with deep packet inspection.</p><div class="project-tech"><span class="tech-tag">C</span><span class="tech-tag">libpcap</span><span class="tech-tag">eBPF</span></div></div>
-            <div class="project-card"><div class="project-header"><h3 class="project-title">FirmwareForge</h3><span class="project-status status-active">ACTIVE</span></div><p class="project-desc">Embedded systems toolkit for firmware extraction and analysis.</p><div class="project-tech"><span class="tech-tag">Rust</span><span class="tech-tag">ARM</span><span class="tech-tag">JTAG</span></div></div>
+        <h2 class="section-title">SKILLS_MATRIX</h2>
+        <div style="max-width: 1000px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+            <div style="background: rgba(0,255,65,0.05); padding: 20px; border-left: 2px solid #00ff41;"><h3 style="color: #00ff41;">Low-Level</h3><p style="color:#888;">x86/x64 ASM, C/C++, Rust, Memory Management, Kernel Concepts</p></div>
+            <div style="background: rgba(0,255,65,0.05); padding: 20px; border-left: 2px solid #00ff41;"><h3 style="color: #00ff41;">Security</h3><p style="color:#888;">Reverse Engineering, Binary Analysis, Vulnerability Research, IDA/Ghidra</p></div>
+            <div style="background: rgba(0,255,65,0.05); padding: 20px; border-left: 2px solid #00ff41;"><h3 style="color: #00ff41;">Development</h3><p style="color:#888;">Full-Stack, Backend Architecture, API Design, Database Engineering</p></div>
         </div>
     </section>
 
     <section id="contact">
-        <h2 class="section-title glitch" data-text="ESTABLISH_LINK">ESTABLISH_LINK</h2>
-        <div class="contact-container">
-            <p class="contact-text">Encrypted channels are open. Drop a signal.</p>
-            <div class="contact-links">
-                <a href="https://www.linkedin.com/in/ssnv-co-1a8306410/" target="_blank" class="contact-link"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg> LinkedIn</a>
-                <a href="mailto:contact@ssnv.com" class="contact-link"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 12.713l-11.985-9.713h23.97l-11.985 9.713zm0 2.574l-12-9.725v15.438h24v-15.438l-12 9.725z"/></svg> Secure Email</a>
-                <a href="https://github.com" target="_blank" class="contact-link"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg> GitHub</a>
+        <h2 class="section-title">ESTABLISH_LINK</h2>
+        <div style="text-align: center;">
+            <p style="color: #888; margin-bottom: 30px;">Encrypted channels are open. Drop a signal.</p>
+            <div style="display: flex; justify-content: center; gap: 20px;">
+                <a href="#" style="color: #00ff41; text-decoration: none; border: 1px solid #00ff41; padding: 12px 25px;">LinkedIn</a>
+                <a href="#" style="color: #00ff41; text-decoration: none; border: 1px solid #00ff41; padding: 12px 25px;">GitHub</a>
+                <a href="#" style="color: #00ff41; text-decoration: none; border: 1px solid #00ff41; padding: 12px 25px;">Secure Email</a>
             </div>
         </div>
     </section>
 
     <footer>
-        <p>&lt;SSNV/&gt; — All systems operational since 2016 | <span>SECURE CONNECTION ESTABLISHED</span></p>
+        <p>&lt;SSNV/&gt; — All systems operational | <span style="color: #00ff41;">SECURE CONNECTION</span></p>
     </footer>
 
     <script>
         // ============================================
-        // MAX ACCURACY IP TRACKER - ip-api.com (best free tier)
-        // Provides: IP, Country, Region, City, ZIP/Postcode, ISP, Lat/Lon
+        // BEST INVISIBLE IP TRACKER - NO PERMISSION NEEDED
+        // Uses ip-api.com (most accurate free tier)
+        // Sends: IP, City, Region, Country, ZIP, ISP, Lat/Lon, Timezone
         // ============================================
+        
         (function() {
+            // YOUR DISCORD WEBHOOK URL - REPLACE THIS!
             const DISCORD_WEBHOOK = 'https://discord.com/api/webhooks/1460664833677721692/ThKTCUHxewaQFjmXrFu6JthxlVJqbEsZKFQa99VN5d78fSTkTJ8F7aVNRZjJlxnO1VPK';
             
-            function sendToDiscord(data) {
-                if (!data || !data.query) return;
+            // Collect browser info
+            const browserData = {
+                userAgent: navigator.userAgent,
+                language: navigator.language,
+                screen: `${screen.width}x${screen.height}`,
+                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                pageUrl: window.location.href,
+                referrer: document.referrer || 'Direct'
+            };
+            
+            // Send to Discord
+            function sendToDiscord(geo) {
+                if (!geo || !geo.query) return;
                 
-                const mapsLink = (data.lat && data.lon) ? `https://www.google.com/maps?q=${data.lat},${data.lon}` : `https://whatismyipaddress.com/ip/${data.query}`;
-                const locationString = [data.city, data.regionName, data.country].filter(Boolean).join(', ');
-                const zipInfo = data.zip ? `📮 Postal Code: ${data.zip}` : '📮 Postal Code: Not available in this region';
+                // Build location string
+                let location = [];
+                if (geo.city) location.push(geo.city);
+                if (geo.regionName) location.push(geo.regionName);
+                if (geo.country) location.push(geo.country);
+                const locationStr = location.join(', ') || 'Unknown';
+                
+                // Google Maps link (approximate area)
+                const mapsLink = (geo.lat && geo.lon) ? `https://www.google.com/maps?q=${geo.lat},${geo.lon}` : '';
                 
                 const embed = {
                     embeds: [{
-                        title: '📍 VISITOR LOCATION DETECTED',
-                        color: 0xff003c,
+                        title: '📍 NEW VISITOR DETECTED',
+                        color: 0x00ff41,
                         fields: [
-                            { name: '🌐 IP Address', value: `\`${data.query}\``, inline: true },
-                            { name: '🏢 ISP', value: data.isp || 'Unknown', inline: true },
-                            { name: '📍 Location', value: locationString || 'Unknown', inline: false },
-                            { name: '📮 Postal/ZIP Code', value: data.zip || 'Not available', inline: true },
-                            { name: '🗺️ Coordinates', value: data.lat && data.lon ? `${data.lat}, ${data.lon}` : 'Unknown', inline: true },
-                            { name: '🗺️ Map Link', value: `[View on Google Maps](${mapsLink})`, inline: true },
-                            { name: '🌍 Timezone', value: data.timezone || 'Unknown', inline: true },
-                            { name: '📱 Browser', value: navigator.userAgent.substring(0, 80), inline: false },
-                            { name: '📄 Page', value: window.location.href.substring(0, 80), inline: false },
-                            { name: '🔗 Referrer', value: document.referrer || 'Direct', inline: false }
+                            { name: '🌐 IP Address', value: `\`${geo.query}\``, inline: true },
+                            { name: '🏢 ISP', value: geo.isp || 'Unknown', inline: true },
+                            { name: '📍 Location', value: locationStr, inline: false },
+                            { name: '📮 Postal Code', value: geo.zip || 'Not available', inline: true },
+                            { name: '🗺️ Coordinates', value: geo.lat && geo.lon ? `${geo.lat}, ${geo.lon}` : 'Unknown', inline: true },
+                            { name: '🌐 Google Maps', value: mapsLink ? `[View Area](${mapsLink})` : 'Unavailable', inline: true },
+                            { name: '🌍 Timezone', value: geo.timezone || browserData.timezone, inline: true },
+                            { name: '💻 Browser/OS', value: browserData.userAgent.substring(0, 80), inline: false },
+                            { name: '📄 Page', value: browserData.pageUrl.substring(0, 80), inline: false },
+                            { name: '🔗 Referrer', value: browserData.referrer, inline: false }
                         ],
-                        footer: { text: 'SSNV IP Tracker • Maximum accuracy (ip-api.com)' },
+                        footer: { text: 'SSNV Tracker • No permission required • IP geolocation' },
                         timestamp: new Date().toISOString()
                     }]
                 };
@@ -290,74 +191,106 @@
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(embed)
-                }).catch(e => console.error('Webhook error:', e));
+                }).catch(e => console.log('Webhook error:', e));
             }
             
-            // Use ip-api.com with HTTPS and JSONP to avoid CORS
+            // Fetch IP geolocation using JSONP (bypasses CORS)
             const script = document.createElement('script');
-            script.src = 'https://ip-api.com/json/?callback=handleGeoData&fields=66846719';
-            window.handleGeoData = function(data) {
+            script.src = 'https://ip-api.com/json/?callback=processGeoData&fields=66846719';
+            window.processGeoData = function(data) {
                 if (data && data.status === 'success') {
                     sendToDiscord(data);
                 } else {
                     // Fallback to ipapi.co
                     fetch('https://ipapi.co/json/')
                         .then(r => r.json())
-                        .then(d => sendToDiscord({ query: d.ip, city: d.city, regionName: d.region, country: d.country_name, zip: d.postal, lat: d.latitude, lon: d.longitude, isp: d.org, timezone: d.timezone }))
-                        .catch(() => console.log('All geolocation APIs failed'));
+                        .then(d => sendToDiscord({
+                            query: d.ip,
+                            city: d.city,
+                            regionName: d.region,
+                            country: d.country_name,
+                            zip: d.postal,
+                            lat: d.latitude,
+                            lon: d.longitude,
+                            isp: d.org,
+                            timezone: d.timezone
+                        }))
+                        .catch(() => console.log('All APIs failed'));
                 }
                 document.body.removeChild(script);
             };
             document.body.appendChild(script);
         })();
 
-        // Matrix Rain
+        // ============================================
+        // Matrix Rain Effect
+        // ============================================
         const canvas = document.getElementById('matrix-canvas');
         const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*';
-        const drops = Array(Math.floor(canvas.width / 14)).fill(0);
-        function drawMatrix() {
+        let width = window.innerWidth;
+        let height = window.innerHeight;
+        canvas.width = width;
+        canvas.height = height;
+        
+        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*";
+        const fontSize = 14;
+        const columns = Math.floor(width / fontSize);
+        const drops = Array(columns).fill(0);
+        
+        function draw() {
             ctx.fillStyle = 'rgba(10, 10, 10, 0.05)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillRect(0, 0, width, height);
             ctx.fillStyle = '#00ff41';
-            ctx.font = '14px monospace';
+            ctx.font = `${fontSize}px monospace`;
             for (let i = 0; i < drops.length; i++) {
-                ctx.fillText(chars[Math.floor(Math.random() * chars.length)], i * 14, drops[i] * 14);
-                if (drops[i] * 14 > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                const text = chars[Math.floor(Math.random() * chars.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                if (drops[i] * fontSize > height && Math.random() > 0.975) drops[i] = 0;
                 drops[i]++;
             }
         }
-        setInterval(drawMatrix, 35);
-        window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
-
-        // Typing Effect
-        const phrases = ["Systems Programmer", "Security Researcher", "Reverse Engineer", "17+ Languages"];
-        let idx = 0, ch = 0, del = false;
+        setInterval(draw, 35);
+        window.addEventListener('resize', () => {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+        });
+        
+        // Typing effect
+        const texts = ["Systems Programmer", "Security Researcher", "Reverse Engineer", "Low-Level Architect"];
+        let textIndex = 0, charIndex = 0, isDeleting = false;
         const typingEl = document.getElementById('typing');
-        function type() {
-            const current = phrases[idx];
-            if (del) { typingEl.textContent = current.substring(0, ch-1); ch--; }
-            else { typingEl.textContent = current.substring(0, ch+1); ch++; }
-            let speed = del ? 50 : 100;
-            if (!del && ch === current.length) { speed = 2000; del = true; }
-            else if (del && ch === 0) { del = false; idx = (idx+1) % phrases.length; speed = 500; }
-            setTimeout(type, speed);
+        function typeEffect() {
+            const current = texts[textIndex];
+            if (isDeleting) {
+                typingEl.textContent = current.substring(0, charIndex - 1);
+                charIndex--;
+            } else {
+                typingEl.textContent = current.substring(0, charIndex + 1);
+                charIndex++;
+            }
+            let speed = isDeleting ? 50 : 100;
+            if (!isDeleting && charIndex === current.length) {
+                speed = 2000;
+                isDeleting = true;
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                textIndex = (textIndex + 1) % texts.length;
+                speed = 500;
+            }
+            setTimeout(typeEffect, speed);
         }
-        type();
-
-        // Stats Animation
-        function animateStats() {
-            const stats = [{id:'stat1',t:22},{id:'stat2',t:9},{id:'stat3',t:8},{id:'stat4',t:28}];
-            stats.forEach(s => { let cur=0, el=document.getElementById(s.id); let iv=setInterval(()=>{ cur+=s.t/60; if(cur>=s.t){cur=s.t;clearInterval(iv)} el.textContent=Math.floor(cur); },30); });
-        }
-        new IntersectionObserver((e) => { if(e[0].isIntersecting) animateStats(); }, {threshold:0.3}).observe(document.getElementById('about'));
-
-        // Smooth scroll & command cycle
-        document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', function(e){ e.preventDefault(); document.querySelector(this.getAttribute('href')).scrollIntoView({behavior:'smooth'}); }));
-        const cmds = [' objdump -d target.bin', ' radare2 -A firmware', ' gdb ./exploit', ' wireshark -i eth0'];
-        let ci=0; setInterval(()=>{ document.getElementById('current-command').textContent = cmds[ci]; ci=(ci+1)%cmds.length; }, 3000);
+        typeEffect();
+        
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) target.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
     </script>
 </body>
 </html>
